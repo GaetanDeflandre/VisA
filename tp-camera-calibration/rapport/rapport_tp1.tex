@@ -11,7 +11,7 @@
 % --------------------------------------
 
 
-%\usepackage[francais]{babel}
+\usepackage[francais]{babel}
 %\usepackage{ucs}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -185,7 +185,7 @@ end
 \subsection{Matrice intrinsèque}
 
 Étant donné que la mire est plane, nous n'avons pas besoin de la profondeur donnée par 
-l'axe $Z$ dans les coordonnées de la mire par rapport à la scène. Dans Scilab, cela se 
+l'axe $Z$, dans les coordonnées de la mire par rapport à la scène. Dans Scilab, cela se 
 traduit par: \textbf{M(sansZ,:)}. Nous avons donc: 
 
 \begin{equation}
@@ -286,7 +286,7 @@ d'homographies.
   \end{bmatrix}
 \end{equation}
 
-Les valeurs de $B$ sont calculées et rangées dans une vecteur $b$ (ligne 12, listing 4).
+Les valeurs de $B$ sont calculées et rangées dans un vecteur $b$ (Annexe, ligne 29).\\
 
 Une fois le vecteur $b$ obtenu, nous pouvons approximer les valeurs de la matrice intrinsèque:
 
@@ -445,9 +445,9 @@ Soit A la matrice intrinsèque de la caméra qui peut s'exprimer par les formule
   \end{bmatrix}
 \end{equation}
 
-Si nous disposons de la taille du capture en $x$ et en $y$, ainsi que du nombres de 
-pixels en $x$ et en $y$ du capteur. Alors nous retrouver le facteur d'échelle en 
-$x$ et en $y$:
+Si nous disposons de la taille du capteur en $x$ et en $y$, ainsi que du nombre de 
+pixels en $x$ et en $y$ du capteur. Alors, nous retrouver le facteur d'échelle $k_u$ en 
+$x$ et $k_v$ en $y$:
 
 \begin{equation}
 \begin{aligned}
@@ -465,17 +465,19 @@ Donc, nous calculons la focale avec:
 \end{aligned}
 \end{equation}
 
-Si nous disposons des coordonnées du centre de l'image, $u_0$ et $v_0$. Alors 
-nous pouvons utiliser ces valeurs exacte plus que leurs estimation lors des calcule 
+Si nous disposons des coordonnées du centre de l'image, $u_0$ et $v_0$. Alors,
+nous pouvons utiliser ces valeurs exactes plutôt que leurs estimations lors des calculs 
 de la matrice intrinsèque dans la méthode Zhang.
 
 \section{Conclusion}
 
 Pour conclure, la méthode Zhang permet de retrouver la matrice intrinsèque et les 
-matrice extrinsèques des images d'un objet dont nous connaissons les coordonnées dans 
-la scène.\\
+matrices extrinsèques d'images. Ces images doivent convenir un objet plat dont nous 
+connaissons les coordonnées dans la scène, ainsi que les coordonnées de l'objet sur 
+les différents plans images.\\
 
-Ce type de méthode permet d'appréhender d'autres technique tel que les tenseurs trifocale.
+Ce type de méthode permet d'appréhender d'autres technologies telles que les tenseurs 
+trifocaux.
 
 \section{Annexe}
 
