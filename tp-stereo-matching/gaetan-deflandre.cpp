@@ -23,9 +23,10 @@ Inclure les fichiers d'entete
 #include <opencv2/core/core.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <iostream>
 using namespace cv;
 #include "glue.hpp"
-#include "prenom-nom.hpp"
+#include "gaetan-deflandre.hpp"
 
 // -----------------------------------------------------------------------
 /// \brief Detecte les coins.
@@ -38,11 +39,22 @@ Mat iviDetectCorners(const Mat& mImage,
                      int iMaxCorners) {
     // A modifier !
     double tx = mImage.cols, ty = mImage.rows;
-    Mat mCorners = (Mat_<double>(3,4) <<
-        .25 * tx, .75 * tx, .25 * tx, .75 * tx,
-        .25 * ty, .25 * ty, .75 * ty, .75 * ty,
-        1., 1., 1., 1.
-        );
+
+    vector<Point> corners = vector<Point>();
+
+    goodFeaturesToTrack(mImage, corners, iMaxCorners, 0.01, 10);
+
+    unsigned int nbPoint = corners.size();
+    Mat mCorners = Mat(3, nbPoint, CV_64F);
+
+    for (int i=0; i<nbPoint; i++){
+        mCorners.at<double>(0,i) = corners[i].x;
+        mCorners.at<double>(1,i) = corners[i].y;
+        mCorners.at<double>(2,i) = 1;
+    }
+
+    std::cout << mCorners << std::endl;
+
     // Retour de la matrice
     return mCorners;
 }
@@ -56,6 +68,17 @@ Mat iviDetectCorners(const Mat& mImage,
 Mat iviVectorProductMatrix(const Mat& v) {
     // A modifier !
     Mat mVectorProduct = Mat::eye(3, 3, CV_64F);
+
+    mVectorProduct.at<double>(Point(0,0)) = 0.0;
+    mVectorProduct.at<double>(Point(0,1)) = -v.at<double>(Point(2,0));
+    mVectorProduct.at<double>(Point(0,2)) = v.at<double>(Point(1,0));
+    mVectorProduct.at<double>(Point(1,0)) = v.at<double>(Point(2,0));
+    mVectorProduct.at<double>(Point(1,1)) = 0.0;
+    mVectorProduct.at<double>(Point(1,2)) = -v.at<double>(Point(0,0));
+    mVectorProduct.at<double>(Point(2,0)) = -v.at<double>(Point(1,0));
+    mVectorProduct.at<double>(Point(2,1)) = v.at<double>(Point(0,0));
+    mVectorProduct.at<double>(Point(2,2)) = 0.0;
+
     // Retour de la matrice
     return mVectorProduct;
 }
@@ -73,9 +96,23 @@ Mat iviFundamentalMatrix(const Mat& mLeftIntrinsic,
                          const Mat& mLeftExtrinsic,
                          const Mat& mRightIntrinsic,
                          const Mat& mRightExtrinsic) {
-    // A modifier !
+
     // Doit utiliser la fonction iviVectorProductMatrix
     Mat mFundamental = Mat::eye(3, 3, CV_64F);
+
+    Mat reduc = (Mat_<double>(3,4) <<
+        1.0, 0.0, 0.0, 0.0,
+        0.0, 1.0, 0.0, 0.0,
+        0.0, 0.0, 1.0, 0.0
+        );
+    Mat p1 = mLeftIntrinsic * reduc * mLeftExtrinsic;
+    Mat p2 = mRightIntrinsic * reduc * mRightExtrinsic;
+
+    Mat iE1 = mLeftExtrinsic.inv();
+    Mat o1 = iE1.col(3);
+
+    mFundamental = iviVectorProductMatrix(p2 * o1) * p2 * p1.inv(DECOMP_SVD);
+
     // Retour de la matrice fondamentale
     return mFundamental;
 }
