@@ -24,6 +24,7 @@ Inclure les fichiers d'entete
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
+#include <cmath>
 using namespace cv;
 #include "glue.hpp"
 #include "gaetan-deflandre.hpp"
@@ -53,7 +54,7 @@ Mat iviDetectCorners(const Mat& mImage,
         mCorners.at<double>(2,i) = 1;
     }
 
-    std::cout << mCorners << std::endl;
+    //std::cout << mCorners << std::endl;
 
     // Retour de la matrice
     return mCorners;
@@ -69,15 +70,15 @@ Mat iviVectorProductMatrix(const Mat& v) {
     // A modifier !
     Mat mVectorProduct = Mat::eye(3, 3, CV_64F);
 
-    mVectorProduct.at<double>(Point(0,0)) = 0.0;
-    mVectorProduct.at<double>(Point(0,1)) = -v.at<double>(Point(2,0));
-    mVectorProduct.at<double>(Point(0,2)) = v.at<double>(Point(1,0));
-    mVectorProduct.at<double>(Point(1,0)) = v.at<double>(Point(2,0));
-    mVectorProduct.at<double>(Point(1,1)) = 0.0;
-    mVectorProduct.at<double>(Point(1,2)) = -v.at<double>(Point(0,0));
-    mVectorProduct.at<double>(Point(2,0)) = -v.at<double>(Point(1,0));
-    mVectorProduct.at<double>(Point(2,1)) = v.at<double>(Point(0,0));
-    mVectorProduct.at<double>(Point(2,2)) = 0.0;
+    mVectorProduct.at<double>(0,0) = 0.0;
+    mVectorProduct.at<double>(1,0) = -v.at<double>(Point(2,0));
+    mVectorProduct.at<double>(2,0) = v.at<double>(Point(1,0));
+    mVectorProduct.at<double>(0,1) = v.at<double>(Point(2,0));
+    mVectorProduct.at<double>(1,1) = 0.0;
+    mVectorProduct.at<double>(2,1) = -v.at<double>(Point(0,0));
+    mVectorProduct.at<double>(0,2) = -v.at<double>(Point(1,0));
+    mVectorProduct.at<double>(1,2) = v.at<double>(Point(0,0));
+    mVectorProduct.at<double>(2,2) = 0.0;
 
     // Retour de la matrice
     return mVectorProduct;
@@ -130,7 +131,39 @@ Mat iviDistancesMatrix(const Mat& m2DLeftCorners,
                        const Mat& m2DRightCorners,
                        const Mat& mFundamental) {
     // A modifier !
-    Mat mDistances = Mat();
+
+    int nbPoint = m2DLeftCorners.cols;
+    Mat mDistances = Mat(1, nbPoint, CV_64F);
+
+    /*int lrows = m2DLeftCorners.rows;
+    int lcols = m2DLeftCorners.cols;
+    int rrows = m2DLeftCorners.rows;
+    int rcols = m2DLeftCorners.cols;
+
+    std::cout << "left r: " << lrows << ", c: " << lcols << std::endl;
+    std::cout << "rigth r: " << rrows << ", c: " << rcols << std::endl;*/
+
+    for(unsigned i=0; i<nbPoint; i++){
+
+        Mat m1 = m2DLeftCorners.col(i);
+        Mat m2 = m2DRightCorners.col(i);
+        Mat d2 = mFundamental * m1;
+        Mat d1 = mFundamental.t() * m2;
+
+        //std::cout << "d1:" << d1 << " ;; d2:" << d2 << std::endl;
+        //std::cout << "------------------" << std::endl;
+
+        double dist1 = fabs(d2.at<double>(0,0)*m1.at<double>(0,0) + d2.at<double>(1,0)*m1.at<double>(1,0) + d2.at<double>(2,0))
+                        / sqrt(d2.at<double>(0,0)*d2.at<double>(0,0) + d2.at<double>(1,0)*d2.at<double>(1,0));
+
+        double dist2 = fabs(d1.at<double>(0,0)*m2.at<double>(0,0) + d1.at<double>(1,0)*m2.at<double>(1,0) + d1.at<double>(2,0))
+                        / sqrt(d1.at<double>(0,0)*d1.at<double>(0,0) + d1.at<double>(1,0)*d1.at<double>(1,0));
+
+        std::cout << "dist1: " << dist1 << " \t;; dist2: " << dist2 << std::endl;
+
+        double dist = dist1 + dist2;
+    }
+
     // Retour de la matrice fondamentale
     return mDistances;
 }
