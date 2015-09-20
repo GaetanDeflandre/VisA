@@ -132,8 +132,9 @@ Mat iviDistancesMatrix(const Mat& m2DLeftCorners,
                        const Mat& mFundamental) {
     // A modifier !
 
-    int nbPoint = m2DLeftCorners.cols;
-    Mat mDistances = Mat(1, nbPoint, CV_64F);
+    unsigned lenLeft = m2DLeftCorners.cols;
+    unsigned lenRight = m2DRightCorners.cols;
+    Mat mDistances = Mat(lenLeft, lenRight, CV_64F);
 
     /*int lrows = m2DLeftCorners.rows;
     int lcols = m2DLeftCorners.cols;
@@ -143,25 +144,29 @@ Mat iviDistancesMatrix(const Mat& m2DLeftCorners,
     std::cout << "left r: " << lrows << ", c: " << lcols << std::endl;
     std::cout << "rigth r: " << rrows << ", c: " << rcols << std::endl;*/
 
-    for(unsigned i=0; i<nbPoint; i++){
+    for(unsigned i=0; i<lenLeft; i++){
 
-        Mat m1 = m2DLeftCorners.col(i);
-        Mat m2 = m2DRightCorners.col(i);
-        Mat d2 = mFundamental * m1;
-        Mat d1 = mFundamental.t() * m2;
+        for(unsigned j=0; j<lenRight; j++){
 
-        //std::cout << "d1:" << d1 << " ;; d2:" << d2 << std::endl;
-        //std::cout << "------------------" << std::endl;
+            Mat m1 = m2DLeftCorners.col(i);
+            Mat m2 = m2DRightCorners.col(j);
+            Mat d2 = mFundamental * m1;
+            Mat d1 = mFundamental.t() * m2;
 
-        double dist1 = fabs(d2.at<double>(0,0)*m1.at<double>(0,0) + d2.at<double>(1,0)*m1.at<double>(1,0) + d2.at<double>(2,0))
-                        / sqrt(d2.at<double>(0,0)*d2.at<double>(0,0) + d2.at<double>(1,0)*d2.at<double>(1,0));
+            //std::cout << "d1:" << d1 << " ;; d2:" << d2 << std::endl;
+            //std::cout << "------------------" << std::endl;
 
-        double dist2 = fabs(d1.at<double>(0,0)*m2.at<double>(0,0) + d1.at<double>(1,0)*m2.at<double>(1,0) + d1.at<double>(2,0))
-                        / sqrt(d1.at<double>(0,0)*d1.at<double>(0,0) + d1.at<double>(1,0)*d1.at<double>(1,0));
+            double dist1 = fabs(d2.at<double>(0,0)*m1.at<double>(0,0) + d2.at<double>(1,0)*m1.at<double>(1,0) + d2.at<double>(2,0))
+                            / sqrt(d2.at<double>(0,0)*d2.at<double>(0,0) + d2.at<double>(1,0)*d2.at<double>(1,0));
 
-        std::cout << "dist1: " << dist1 << " \t;; dist2: " << dist2 << std::endl;
+            double dist2 = fabs(d1.at<double>(0,0)*m2.at<double>(0,0) + d1.at<double>(1,0)*m2.at<double>(1,0) + d1.at<double>(2,0))
+                            / sqrt(d1.at<double>(0,0)*d1.at<double>(0,0) + d1.at<double>(1,0)*d1.at<double>(1,0));
 
-        double dist = dist1 + dist2;
+            double dist = dist1 + dist2;
+
+
+            mDistances.at<double>(i,j) = dist;
+        }
     }
 
     // Retour de la matrice fondamentale
@@ -181,5 +186,54 @@ void iviMarkAssociations(const Mat& mDistances,
                          double dMaxDistance,
                          Mat& mRightHomologous,
                          Mat& mLeftHomologous) {
-    // A modifier !
+
+    // Ligne: point de l'image gauche
+    // Colonne: point de l'image droite
+    unsigned rows = mDistances.rows;
+    unsigned cols = mDistances.cols;
+
+    mRightHomologous = Mat(rows, 1, CV_64F);
+    mLeftHomologous =  Mat(cols, 1, CV_64F);
+
+    for (unsigned i=0; i<rows; i++){
+        double dMin = mDistances.at<double>(i,0);
+        unsigned jMin = 0;
+        for (unsigned j=0; j<cols; j++){
+            // Recherche le point (image de droite) homologue au point d'indice i (image de gauche)
+            if (dMin > mDistances.at<double>(i,j)){
+                dMin = mDistances.at<double>(i,j);
+                jMin = j;
+            }
+        }
+
+        // Si le point retrouvé est moins éloignés que le seuil dMaxDistance,
+        if (dMin<dMaxDistance){
+            // alors on les considère homologues
+            mRightHomologous.at<double>(i,0) = jMin;
+        } else {
+            // sinon on indique par -1 qu'on n'a pas trouvé du point
+            mRightHomologous.at<double>(i,0) = -1;
+        }
+    }
+
+    for (unsigned j=0; j<cols; j++){
+        double dMin = mDistances.at<double>(0,j);
+        unsigned iMin = 0;
+        for (unsigned i=0; i<rows; i++){
+            // Recherche le point (image de gauche) homologue au point d'indice j (image de droite)
+            if (dMin > mDistances.at<double>(i,j)){
+                dMin = mDistances.at<double>(i,j);
+                iMin = i;
+            }
+        }
+
+        // Si le point retrouvé est moins éloignés que le seuil dMaxDistance,
+        if (dMin<dMaxDistance){
+            // alors on les considère homologues
+            mRightHomologous.at<double>(j,0) = iMin;
+        } else {
+            // sinon on indique par -1 qu'on n'a pas trouvé du point
+            mRightHomologous.at<double>(j,0) = -1;
+        }
+    }
 }
