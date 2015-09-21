@@ -67,7 +67,7 @@ Mat iviDetectCorners(const Mat& mImage,
 /// @return matrice de produit vectoriel
 // -----------------------------------------------------------------------
 Mat iviVectorProductMatrix(const Mat& v) {
-    // A modifier !
+
     Mat mVectorProduct = Mat::eye(3, 3, CV_64F);
 
     mVectorProduct.at<double>(0,0) = 0.0;
@@ -136,14 +136,6 @@ Mat iviDistancesMatrix(const Mat& m2DLeftCorners,
     unsigned lenRight = m2DRightCorners.cols;
     Mat mDistances = Mat(lenLeft, lenRight, CV_64F);
 
-    /*int lrows = m2DLeftCorners.rows;
-    int lcols = m2DLeftCorners.cols;
-    int rrows = m2DLeftCorners.rows;
-    int rcols = m2DLeftCorners.cols;
-
-    std::cout << "left r: " << lrows << ", c: " << lcols << std::endl;
-    std::cout << "rigth r: " << rrows << ", c: " << rcols << std::endl;*/
-
     for(unsigned i=0; i<lenLeft; i++){
 
         for(unsigned j=0; j<lenRight; j++){
@@ -192,6 +184,8 @@ void iviMarkAssociations(const Mat& mDistances,
     unsigned rows = mDistances.rows;
     unsigned cols = mDistances.cols;
 
+    std::cout << "r:"<< rows << ", c:" << cols << std::endl;
+
     mRightHomologous = Mat(rows, 1, CV_64F);
     mLeftHomologous =  Mat(cols, 1, CV_64F);
 
@@ -204,11 +198,13 @@ void iviMarkAssociations(const Mat& mDistances,
                 dMin = mDistances.at<double>(i,j);
                 jMin = j;
             }
+            //std::cout << j << std::endl;
         }
 
         // Si le point retrouvé est moins éloignés que le seuil dMaxDistance,
         if (dMin<dMaxDistance){
             // alors on les considère homologues
+            std::cout << "homologue -> gauche:" << i << ", droite:" << jMin << ", distance:" << dMin << std::endl;
             mRightHomologous.at<double>(i,0) = jMin;
         } else {
             // sinon on indique par -1 qu'on n'a pas trouvé du point
@@ -230,10 +226,10 @@ void iviMarkAssociations(const Mat& mDistances,
         // Si le point retrouvé est moins éloignés que le seuil dMaxDistance,
         if (dMin<dMaxDistance){
             // alors on les considère homologues
-            mRightHomologous.at<double>(j,0) = iMin;
+            mLeftHomologous.at<double>(j,0) = iMin;
         } else {
             // sinon on indique par -1 qu'on n'a pas trouvé du point
-            mRightHomologous.at<double>(j,0) = -1;
+            mLeftHomologous.at<double>(j,0) = -1;
         }
     }
 }
