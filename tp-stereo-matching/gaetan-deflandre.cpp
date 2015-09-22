@@ -226,6 +226,7 @@ void iviMarkAssociations(const Mat& mDistances,
         // Si le point retrouvé est moins éloignés que le seuil dMaxDistance,
         if (dMin<dMaxDistance){
             // alors on les considère homologues
+            std::cout << "homologue -> droite:" << j << ", gauche:" << iMin << ", distance:" << dMin << std::endl;
             mLeftHomologous.at<double>(j,0) = iMin;
         } else {
             // sinon on indique par -1 qu'on n'a pas trouvé du point
