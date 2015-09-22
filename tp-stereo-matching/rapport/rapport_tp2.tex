@@ -140,7 +140,7 @@ permet de retrouver la profondeur.\\
 \section{Calcul de la matrice fondamentale}
 
 En stéréovision les deux projections nous donnent deux images que nous appelons image de gauche et 
-image de droite. Il existe une matrice que l'on nomme matrice fondamentale, elle caractèrise la 
+image de droite. Il existe une matrice que l'on nomme matrice fondamentale, elle caractérise la 
 géométrie épipolaire liée aux deux projections. Il est nécessaire de calculer cette matrice pour 
 effectuer la mise en correspondance des deux images.\\
 
@@ -169,7 +169,7 @@ et $P^+$, la pseudo-inverse de la matrice $P$.\\
 
 Voici les méthodes C++ pour calculer la matrice fondamentale:
 
-\begin{lstlisting}[caption=Fontion qui calcul le produit vectoriel]
+\begin{lstlisting}[caption=Fonction qui calcule le produit vectoriel]
 /// \brief Initialise une matrice de produit vectoriel.
 ///
 /// @param v: vecteur colonne (3 coordonnees)
@@ -193,7 +193,7 @@ Mat iviVectorProductMatrix(const Mat& v) {
 }
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Fontion qui calcul la matrice fondamentale]
+\begin{lstlisting}[caption=Fonction qui calcule la matrice fondamentale]
 /// \brief Initialise et calcule la matrice fondamentale.
 ///
 /// @param mLeftIntrinsic: matrice intrinseque de la camera gauche
@@ -232,7 +232,7 @@ de l'image droite associée au centre de l'image de gauche. Equation: $d_2=Fc_1$
 la matrice fondamentale et $c_1$ le centre de l'image de gauche.\\
 
 Inversement, l'équation de la droite épipolaire de l'image gauche associée au centre de l'image 
-de droite est $d_1=F^Tc_2$. Il vaut transposer la matrice fondamentale.\\
+de droite est $d_1=F^Tc_2$. Il faut transposer la matrice fondamentale.\\
 
 
 
@@ -242,19 +242,20 @@ La méthode que nous utilisons pour la mise en correspondance stéréoscopique c
 étapes:
 
 \begin{itemize}
- \item Extraire les points caractèristique des images.
- \item Calculer les droites épipolaires dans l'image de droite pour les points de l'image de gauche et vise versa.
+ \item Extraire les points caractéristiques des images.
+ \item Calculer les droites épipolaires dans l'image de droite pour les points de l'image de 
+ gauche et vise versa.
  \item Calculer les distances entre les points et les droites.
  \item Recherche les points homologues aux deux images.
 \end{itemize}
 
 \subsection{Extraction des points}
 
-Nous retrouver les points caractèristique (coins) dans les deux images avec la méthode \textbf{Good Feature to Track} 
-proposé par Jianbo Shi et Carlo Tomasi. Cette technique est très largement utiliser en vision et est implémenter 
-sur opencv.
+Nous retrouvons les points caractéristiques (coins) dans les deux images avec la méthode 
+\textbf{Good Feature to Track} proposée par Jianbo Shi et Carlo Tomasi. Cette technique est 
+très largement utilisée en vision et est implémentée sur opencv.
 
-\begin{lstlisting}[caption=Fontion d'extraction les coins]
+\begin{lstlisting}[caption=Fonction d'extraction des coins]
 /// \brief Detecte les coins.
 ///
 /// @param mImage: pointeur vers la structure image openCV
@@ -300,8 +301,8 @@ $$
 distance = \frac{|ap_x + bp_y + c|}{\sqrt{a^2+b^2}}
 $$
 
-Dans le programme, nous conservons dans une matrice bi-dimensionnelle les résultat des distances de chacun 
-points par rapport aux droite épipolaire dans l'autre image.\\
+Dans le programme, nous conservons dans une matrice bi-dimensionnelle les résultats des distances 
+de chaque point par rapport aux droites épipolaires dans l'autre image.\\
 
 Plus de détails
 
