@@ -26,7 +26,7 @@ Inclure les fichiers d'entete
 #include <getopt.h>
 using namespace cv;
 #include "glue.hpp"
-#include "prenom-nom.hpp"
+#include "gaetan-deflandre.hpp"
 
 /* --------------------------------------------------------------------------
 Macros

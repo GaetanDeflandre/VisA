@@ -11,7 +11,7 @@
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
-				<Option parameters="--verbose --display" />
+				<Option parameters="--verbose --display left.png right.png" />
 				<Compiler>
 					<Add option="-g" />
 				</Compiler>
@@ -35,10 +35,10 @@
 			<Add library="opencv_calib3d" />
 		</Linker>
 		<Unit filename="dense-matching.cpp" />
+		<Unit filename="gaetan-deflandre.cpp" />
+		<Unit filename="gaetan-deflandre.hpp" />
 		<Unit filename="glue.cpp" />
 		<Unit filename="glue.hpp" />
-		<Unit filename="prenom-nom.cpp" />
-		<Unit filename="prenom-nom.hpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />
