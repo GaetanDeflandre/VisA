@@ -153,9 +153,6 @@ int main(int argc, char **argv) {
         if (bVerbose) {
             printf("Disparite maximale (ref gauche) = %lf\n", dMax);
         }
-
-        // Changement des normalize
-
         normalize(mLeftDisparity, mLeftDisparity, dMin, dMax, CV_MINMAX);
         minMaxLoc(mRightDisparity, &dMin, &dMax);
         if (bVerbose) {
