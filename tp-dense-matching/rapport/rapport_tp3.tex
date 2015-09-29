@@ -131,11 +131,23 @@
 
 
 \section{Introduction}
+Dans le cadre du second TP, nous avons étudié la géométrie épipolaire. Ainsi, nous avons
+effectué une mise en correspondance stéréoscopique. \\
 
+Dans ce troisième TP, nous travaillons sur la stéréovision dense, qui consiste à calculer 
+la disparité, entre l'image de gauche et de droite, associée à chaque pixel. Pour cela, les 
+images sont acquises avec un stéréoscope canonique, car les droites épipolaires associées à 
+deux points homologues sont confondues. Dans le cas d'un stéréoscope non canonique, il faut 
+passer par une étape de rectification épipolaire avant de calculer la disparité.\\
 
 \newpage
 
 \section{Fonctionnement général}
+
+Nous utilisons des images acquises avec un stéréoscope canonique. L'une des propriétés 
+intéressantes et que les droites épipolaires associées à deux points homologues sont 
+confondues. En effet, avec cette configuration, de simplesdécalages horizontaux suffisent 
+pour retrouver les points homologues.\\
 
 \begin{figure}[H]
   \centering
@@ -143,8 +155,10 @@
   \shortstack{\includegraphics[width=200px]{../right.png} \\ Image de droite}
 \end{figure}
 
-La premier double boucle de la fonction initialise la matrice
-\textbf{mMinSSD} avec la valeur de $dMinSSD = (2 * iWindowHalfSize + 1)^2 * 512.0$
+La première double boucle de la fonction initialise la matrice
+\textbf{mMinSSD} avec la valeur de $dMinSSD = (2 * iWindowHalfSize + 1)^2 * 512.0$. 
+C'est-à-dire la dissimilarité maximum SSD: la somme des différences aux carrés (sum of squared 
+differences).
 
 \begin{lstlisting}[caption=Initialisation]
     // Initialisation de l'image du minimum de SSD
@@ -165,28 +179,86 @@ La premier double boucle de la fonction initialise la matrice
     }
 \end{lstlisting}
 
-Les boucle qui suivent recherche pour chaque pixel de l'image de
-gauche le décalage qui minimise la dissimilarité SSD. Les valeurs
-des décalages sont stocké dans \textbf{mLeftDisparityMap}.
+\newpage
+
+Les boucles qui suivent recherches pour chaque pixel de l'image de gauche le décalage qui 
+minimise la disparité. Nous retrouvons le décalage minimum, par calcul de la dissimilarité
+SSD (sum of squared differences).\\
+
+Pour un point donné, la SSD minimum est calculé en parcourant les pixels avec la même 
+abscisse que ce point. Pour chacun de ces points, une valeur SSD est calculée et stockée 
+dans \textbf{mSDD}, une matrice tampon. Si cette valeur est minimale, nous la stockons 
+dans \textbf{mMinSSD}.\\
+
+Les valeurs des décalages sont stockées dans \textbf{mLeftDisparityMap}.\\
+
+
+\begin{lstlisting}[caption=Retrouver dissimilarité minimum]
+for (unsigned x=iWindowHalfSize; x<=cols; x++){
+  for (unsigned y=iWindowHalfSize; y<=rows; y++){
+    for (int i= -iWindowHalfSize; i<=iWindowHalfSize; i++){
+
+      if (winX<0 || winX>=cols){
+        // Si on est hors de l'image on passe
+        continue;
+      }
+      for(int j=-iWindowHalfSize; j<=iWindowHalfSize; j++){
+
+        winX = x + i;
+        winY = y + j;
+
+        if (winY<0 || winY>=rows){
+          // Si on est hors de l'image on passe
+          continue;
+        }
+
+        // Valeur image gauche
+        double il = (double)mLeftGray.at<unsigned char>(winY,winX);
+        // Valeur image droite
+        double ir = (double)mRightGray.at<unsigned char>(winY,winX-iShift);
+
+        ssd += pow(il-ir, 2.0);
+
+      }
+    }
+
+    mLeftSSDCost.at<double>(y,x) = ssd;
+    ssd = 0.0;
+  }
+}
+\end{lstlisting}
+
+\newpage
+
 
 \section{Calculs des disparités gauches, puis droites}
 
 La fonction \textbf{normalize} est utilisée pour que les images calculées 
 utilisent tout l'histogramme des niveaux de gris. Après cela, nous distinguons 
-les différents niveaux de gris car l'écart-type est plus élevé.
+les différents niveaux de gris car l'écart-type de l'histogramme plus élevé.
 
 $$
 normalize(mLeftDisparity, mLeftDisparity, 0, 255, CV\_MINMAX);
-$$
+$$\\
 
+Pour le calcul dissimilarité, nous utilisons la SDD (sum of squared differences) 
+qui se sert qu'un voisinage dans l'image de gauche et droite.\\
+
+Formule de la SSD:
+
+$$
+\sum_{i=-w_x}^{w_x} \sum_{i=-w_y}^{w_y} (I_l(x_l+i,y+j)-I_r(x_l+1-s,y+j))^2
+$$
 
 \begin{figure}[H]
   \centering
-  \shortstack{\includegraphics[height=140px]{../left_disparity.png} \\ Disparité de gauche}
-  \shortstack{\includegraphics[height=140px]{../right_disparity.png} \\ Disparité de droite}
+  \shortstack{\includegraphics[height=140px]{../left_disparity.png} \\ Dissimilarité de gauche}
+  \shortstack{\includegraphics[height=140px]{../right_disparity.png} \\ Dissimilarité de droite}
 \end{figure}
 
-\begin{lstlisting}[caption=Calcul du SSD gauche]
+\newpage
+
+\begin{lstlisting}[caption=Calcul de la SSD gauche]
     for (unsigned x=iWindowHalfSize; x<=cols; x++){
         for (unsigned y=iWindowHalfSize; y<=rows; y++){
             for (int i= -iWindowHalfSize; i<=iWindowHalfSize; i++){
@@ -225,7 +297,9 @@ $$
     return mLeftSSDCost.clone();
 \end{lstlisting}
 
-\begin{lstlisting}[caption=Calcul du SSD droit]
+\newpage
+
+\begin{lstlisting}[caption=Calcul de la SSD droit]
     for (unsigned x=iWindowHalfSize; x<=cols; x++){
         for (unsigned y=iWindowHalfSize; y<=rows; y++){
             for (int i= -iWindowHalfSize; i<=iWindowHalfSize; i++){
@@ -264,14 +338,22 @@ $$
     return mRightSSDCost.clone();
 \end{lstlisting}
 
+\newpage
+
 \section{Cohérence gauche-droite}
 
-\begin{equation}
+Il est possible de conserver uniquement les paires de pixels homologues qui sont 
+identiques dans les deux images du stéréoscope. Cette technique nous permet d'enlever les 
+faux appariements liés à l'occultation. Pour cela, nous recréons une carte de 
+disparité à partir de la disparité de gauche et de droite. Cette nouvelle carte 
+doit respecter les conditions suivantes:
+
+$$
 \begin{aligned}
 d_r(x,y) &= d_l(x+d_r(x,y),y) \\
 d_l(x,y) &= d_r(x-d_l(x,y),y) \\
 \end{aligned}
-\end{equation}
+$$
 
 
 \begin{figure}[H]
@@ -321,7 +403,13 @@ Mat iviLeftRightConsistency(const Mat& mLeftDisparity,
 
 \section{Conclusion}
 
+Pour conclure, nous constatons qu'avec un stéréoscope canonique, nous pouvons effectuer 
+une carte de disparité dense, cohérente pour l'image gauche et droite. Nous obtenons un 
+résultat satisfaisant. Cependant, un nombre non négligeable de pixels restent sans disparité, 
+lier aux phénomènes d'occultation et de bord.\\
 
+En règle générale, la carte de disparité nous donne une notion de la profondeur de l'image. 
+Avec une exception, pour les objets proches du stéréoscope, situé sur l'entraxe.\\
 
 
 \end{document}
