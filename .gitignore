@@ -7,6 +7,7 @@
 *.out
 *.toc
 *.pdf
+*.backup
 
 ## Intermediate documents:
 *.dvi
@@ -125,3 +126,15 @@ sympy-plots-for-*.tex/
 # WinEdt
 *.bak
 *.sav
+
+# Java
+*.class
+
+.metadata/
+.metadata/*
+
+# CPP
+*.o
+*/obj/*
+*.depend
+*.layout
