@@ -1,0 +1,95 @@
+// A macro to implémente une convolution 3x3 .
+// Version: 0.1
+// Date: 14/07/2006
+// Author: L. Macaire
+ 
+macro "Convolution" {
+
+
+// Ouverture d'une image
+// open ("C:\\lagis-pc-serv2\\enseignement\\enseigne.0910\\master ivi\\seance 1 cours ludo fft\\omega_zero_sept_x.jpg");
+// récupération du ID de l'image
+
+
+image = getImageID();
+
+run("Duplicate...", "title=[image convolution_macro]");
+image_filtre = getImageID();
+
+
+Dialog.create("Debut");
+Dialog.addMessage(" Cliquer sur OK pour commencer la convolution ");
+Dialog.show();
+
+
+setBatchMode(true);
+
+
+
+// récupération de la taille de l'image
+W = getWidth();
+H = getHeight();
+
+// masque 2d
+
+masque =newArray(9);
+masque[0] = -1;
+masque[1] = -1;
+masque[2] = -1;
+
+masque[3] = -1;
+masque[4] =  8;
+masque[5] = -1;
+
+masque[6] = -1;
+masque[7] = -1;
+masque[8] = -1;
+
+
+// convolution par macro
+
+//autoUpdate (false);
+
+
+for (j=1; j<H-1; j++) {
+   for (i=1; i<W-1; i++) 
+	{
+
+	selectImage (image);
+	valeur =  0;
+	
+	for ( u = -1; u<=1;u++)
+		{
+		for (v = -1; v <= 1; v++)
+			{
+			p= getPixel (i+u, j-v);
+			valeur = valeur + p * masque [u+1+3*(v+1) ];
+			}
+		}
+	selectImage (image_filtre);
+	setPixel (i,j,valeur);
+	
+      	}
+   }
+
+setBatchMode(false);
+
+Dialog.create("Fin");
+Dialog.addMessage(" Cliquer sur OK pour terminer la convolution ");
+Dialog.show();
+
+// vérification avec une image convoluée
+
+selectImage (image);
+
+run("Duplicate...", "title=[image convolution]");
+image_convolue = getImageID();
+
+run("Convolve...", "text1=[-1 -1 -1\n-1 8 -1\n-1 -1 -1\n] normalize");
+
+run("Image Calculator...", "image1=[image convolution_macro] operation=Subtract image2=[image convolution] create");
+ 
+
+
+
+}
