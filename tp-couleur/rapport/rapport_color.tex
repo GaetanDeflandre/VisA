@@ -139,7 +139,136 @@
 
 \newpage
 
+Dans ce TP, nous travaillons avec les images du test d'Ishihara utilisé 
+pour déceler le daltonisme.
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=120px]{images/it1_72pp.png}
+    \includegraphics[width=120px]{images/it2_72pp.png}
+    \includegraphics[width=120px]{images/it3_72pp.png}
+    \caption{Images originales utiles à ce TP}
+  \end{center}
+\end{figure}
+
 \section{Manipulation de la luminance}
+
+Dans cet exercice, nous utilisons les images d'origine assombries:
+
+\begin{figure}[H]
+  \begin{center}
+    \includegraphics[width=120px]{images/it1_72pp_sombre.png}
+    \includegraphics[width=120px]{images/it2_72pp_sombre.png}
+    \includegraphics[width=120px]{images/it3_72pp_sombre.png}
+    \caption{Images sombres}
+  \end{center}
+\end{figure}
+
+Pour retrouver, de manière précise, les différences entre l'image 
+d'origine et l'image assombrie, il faut choisir le bon espace de
+représentation de l'image. Dans notre cas, seule la luminosité 
+semble avoir été modifié, ainsi pour trouver aisément cette 
+différence, nous choisissons un espace qui contient l'information de 
+luminance.\\
+
+Les espaces tels que \textit{Lab} et \textit{Luv} contiennent cette 
+information. La valeur \textit{V} de l'espace \textit{HSV} ou le 
+\textit{Y} de l'espace \textit{YUV} peuvent être utilisé. Nous 
+nous servons de l'espace \textit{Lab} lors de cet exercice.\\
+
+Nous pourrions regarder l'information de chrominance également, 
+afin de voir si celle-ci a été modifié.\\
+
+\begin{figure}[H]
+  \begin{center}  
+    \shortstack{
+      \includegraphics[width=150px]{images/it1.png} \\ 
+      \texttt{\small it1\_72pp.png}
+    }
+    \shortstack{
+      \includegraphics[width=150px]{images/it1_sombre.png}\\
+      \texttt{\small it1\_72pp\_sombre.png}
+    }
+    \caption{Diagrammes de it1 original et assombri dans l'espace Lab.}
+  \end{center}
+\end{figure}
+
+Dans l'espace \textit{Lab}, on voit nettement la différence sur l'axe 
+de la luminance. La luminance de l'image sombre ne va pas dans les 
+tons très clairs, alors que la luminance de l'image d'origine est 
+réparti sur tout l'axe \textit{L}.\\
+
+Ainsi, nous pouvons retrouver une valeur $\varphi$ à ajouter à chaque 
+canal de \textit{RGB} pour que les images sombres approximent les images
+originales.
+
+
+
+\begin{table}[H]
+  \begin{center}
+  
+    \begin{tabular}{|l||c|c|c|}
+    
+      \hline
+    
+      \bf Images originales &
+      \includegraphics[width=80px]{images/it1_72pp.png} & 
+      \includegraphics[width=80px]{images/it2_72pp.png} & 
+      \includegraphics[width=80px]{images/it3_72pp.png} \\
+      
+      \hline
+       
+      \bf Images sombres &
+      \includegraphics[width=80px]{images/it1_72pp_sombre.png} &
+      \includegraphics[width=80px]{images/it2_72pp_sombre.png} &
+      \includegraphics[width=80px]{images/it3_72pp_sombre.png}\\
+      
+      \hline
+      
+      \bf Valeur de $\varphi$ &
+      30 &
+      40 &
+      60\\
+      
+      \hline
+    \end{tabular}
+    
+    \caption{Tableau des valeurs de $\varphi$}
+    \label{tab:}
+    
+  \end{center}
+\end{table}
+
+Cependant lorsqu'on calcule la différence entre l'image originale et 
+l'image résultante après ajout de la valeur $\varphi$. On remarque que 
+les images ne sont pas identiques.
+
+\begin{figure}[H]
+  \begin{center}  
+    \shortstack{
+      \includegraphics[width=120px]{images/it1_72pp.png} \\ 
+      \texttt{\small it1\_72pp.png}
+    }
+    \shortstack{
+      \includegraphics[width=120px]{images/luminance_it1.png}\\
+      {\small \texttt{it1\_72pp\_sombre.png} + $\varphi$ }
+    }\\
+    \shortstack{
+      \includegraphics[width=120px]{images/diff_it1.png}\\
+      {\small Différence}
+    }
+    \shortstack{
+      \includegraphics[width=120px]{images/diff_it1_norm.png}\\
+      {\small Différence normalisée}
+    }
+    \caption{La référence non identique}
+  \end{center}
+\end{figure}
+
+Cette différence est normale comme nous ajoutons la même valeur pour 
+chaque canal dans l'espace \textit{RGB}. Or seule la luminance semble
+avoir été modifié. Pour régler ce problème, il faut ajouter la valeur 
+$\varphi$ à la luminance dans un espace qui la contient. 
 
 \section{Rétablissement de la saturation}
 
