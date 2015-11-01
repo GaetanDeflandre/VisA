@@ -5,5 +5,5 @@ TP COULEUR
 
 A l'oeil:
  - 30 pour it1
- - 35 pour it2
- - 50 pour it3
+ - 40 pour it2
+ - 60 pour it3

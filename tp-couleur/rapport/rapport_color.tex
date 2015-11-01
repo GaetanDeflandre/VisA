@@ -183,13 +183,13 @@ afin de voir si celle-ci a été modifié.\\
   \begin{center}  
     \shortstack{
       \includegraphics[width=150px]{images/it1.png} \\ 
-      \texttt{\small it1\_72pp.png}
+      \texttt{\small it1\_72pp.bmp}
     }
     \shortstack{
       \includegraphics[width=150px]{images/it1_sombre.png}\\
-      \texttt{\small it1\_72pp\_sombre.png}
+      \texttt{\small it1\_72pp\_sombre.bmp}
     }
-    \caption{Diagrammes de it1 original et assombri dans l'espace Lab.}
+    \caption{Diagrammes de it1 originale et assombrie dans l'espace Lab.}
   \end{center}
 \end{figure}
 
@@ -247,11 +247,11 @@ les images ne sont pas identiques.
   \begin{center}  
     \shortstack{
       \includegraphics[width=120px]{images/it1_72pp.png} \\ 
-      \texttt{\small it1\_72pp.png}
+      \texttt{\small it1\_72pp.bmp}
     }
     \shortstack{
       \includegraphics[width=120px]{images/luminance_it1.png}\\
-      {\small \texttt{it1\_72pp\_sombre.png} + $\varphi$ }
+      {\small \texttt{it1\_72pp\_sombre.bmp} + $\varphi$ }
     }\\
     \shortstack{
       \includegraphics[width=120px]{images/diff_it1.png}\\
@@ -261,7 +261,7 @@ les images ne sont pas identiques.
       \includegraphics[width=120px]{images/diff_it1_norm.png}\\
       {\small Différence normalisée}
     }
-    \caption{La référence non identique}
+    \caption{La différence non identique}
   \end{center}
 \end{figure}
 
@@ -272,9 +272,48 @@ $\varphi$ à la luminance dans un espace qui la contient.
 
 \section{Rétablissement de la saturation}
 
-\section{Exercice 3}
+Pendant ce second exercice, nous employons les deux images suivantes.
 
-\section{Exercice 4}
+\begin{figure}[H]
+  \begin{center}  
+    \shortstack{
+      \includegraphics[width=120px]{images/it2_72pp.png} \\ 
+      \texttt{\small it2\_72pp.bmp}
+    }
+    \shortstack{
+      \includegraphics[width=120px]{images/it2_72pp_gris.png} \\ 
+      \texttt{\small it2\_72pp\_gris.bmp}
+    }
+    \caption{Images exercice 2}
+  \end{center}
+\end{figure}
+
+Nous remarquons que l'image grise correspond à l'image \texttt{it2} 
+désaturée. Par conséquent, il nous faut un espace colorimétrique qui 
+a l'information de chrominance et de saturation. Nous utilisons donc 
+l'espace \textit{HSV} qui contient ces informations.
+
+\begin{figure}[H]
+  \begin{center}  
+    \shortstack{
+      \includegraphics[width=150px]{images/it2.png} \\ 
+      \texttt{\small it2\_72pp.bmp}
+    }
+    \shortstack{
+      \includegraphics[width=150px]{images/it2_gris.png}\\
+      \texttt{\small it2\_72pp\_gris.bmp}
+    }
+    \caption{Diagrammes de it2 originale et désaturée dans l'espace HSV.}
+  \end{center}
+\end{figure}
+
+% Q2 comme image enregisté en RGVn qu'on ne conserve pas la tainte, 
+% on ne peut pas retrouvé original à partir de gris
+
+
+\section{Transformation de la teinte}
+
+\section{Analyse dans des espaces couleur adaptés}
 
 \section*{Conclusion}
 
