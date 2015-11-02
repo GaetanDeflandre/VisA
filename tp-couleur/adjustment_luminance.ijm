@@ -5,7 +5,7 @@ macro "adjustment_luminance" {
   // recuperation du ID de l'image
   image = getImageID();
 
-  phi = getNumber ("Quelle augmentation (absolue) de luminance", phi);;
+  phi = getNumber ("Quelle augmentation (absolue) de luminance", phi);
 
   // Creation d'une image avec le niveau de gris phi
   newImage("phi_img", "8-bit black", 264, 264, 1);

@@ -233,7 +233,7 @@ originales.
       \hline
     \end{tabular}
     
-    \caption{Tableau des valeurs de $\varphi$}
+    \caption{Tableau ajoute de la valeur de $\varphi$ canaux RGB}
     \label{tab:}
     
   \end{center}
@@ -267,8 +267,15 @@ les images ne sont pas identiques.
 
 Cette différence est normale comme nous ajoutons la même valeur pour 
 chaque canal dans l'espace \textit{RGB}. Or seule la luminance semble
-avoir été modifié. Pour régler ce problème, il faut ajouter la valeur 
-$\varphi$ à la luminance dans un espace qui la contient. 
+avoir été modifié. De plus, nous distinguons une teinte bleue sur 
+l'image de différence. En effet, on ajoute $\varphi$ à la composante 
+blue, de l'image sombre, alors que la teinte des pixels de cette image 
+est jaune, c'est-à-dire composé de rouge et de vert.\\
+
+Pour régler ce problème, il faut ajouter la valeur $\varphi$ à la 
+luminance dans un espace qui la contient. 
+
+\newpage
 
 \section{Rétablissement de la saturation}
 
@@ -276,14 +283,10 @@ Pendant ce second exercice, nous employons les deux images suivantes.
 
 \begin{figure}[H]
   \begin{center}  
-    \shortstack{
-      \includegraphics[width=120px]{images/it2_72pp.png} \\ 
-      \texttt{\small it2\_72pp.bmp}
-    }
-    \shortstack{
-      \includegraphics[width=120px]{images/it2_72pp_gris.png} \\ 
-      \texttt{\small it2\_72pp\_gris.bmp}
-    }
+    \includegraphics[width=100px]{images/it2_72pp.png}
+    \includegraphics[width=100px]{images/it2_72pp_gris.png}
+    \includegraphics[width=100px]{images/it3_72pp.png}
+    \includegraphics[width=100px]{images/it3_72pp_saturation_faible.png}
     \caption{Images exercice 2}
   \end{center}
 \end{figure}
@@ -303,13 +306,72 @@ l'espace \textit{HSV} qui contient ces informations.
       \includegraphics[width=150px]{images/it2_gris.png}\\
       \texttt{\small it2\_72pp\_gris.bmp}
     }
+
     \caption{Diagrammes de it2 originale et désaturée dans l'espace HSV.}
   \end{center}
 \end{figure}
 
-% Q2 comme image enregisté en RGVn qu'on ne conserve pas la tainte, 
-% on ne peut pas retrouvé original à partir de gris
+% A partir d'ici l'orthographe n'est pas corrigé
 
+Il est impossible de retrouver l'image \texttt{it2\_72pp} à partir de 
+\texttt{it2\_72pp\_gris}, car les informations de saturation et de 
+teinte sont perdues. Il faut conserver les informations de saturation 
+et de teinte pour retrouver l'image d'origine.\\
+
+Maintenant, nous analysons les images \texttt{it3\_72pp} et 
+\texttt{it3\_72pp\_saturation\_faible} dont la saturation a été 
+réduite. Pour bien visualiser cette réduction, nous utilisons 
+l'espace de \textit{HSB} qui contient l'information de saturation.
+
+\begin{figure}[H]
+  \begin{center}  
+    \shortstack{
+      \includegraphics[width=150px]{images/it3.png} \\ 
+      \texttt{\small it3\_72pp.bmp}
+    }
+    \shortstack{
+      \includegraphics[width=150px]{images/it3_saturation_faible.png}\\
+      \texttt{\small it3\_72pp\_saturation\_faible.bmp}
+    }
+    \caption{Diagrammes de it3 originale et saturation faible dans l'espace HSB.}
+  \end{center}
+\end{figure}
+
+Approximativement, nous constatons que la saturation a été diviser par 
+2.
+
+\begin{table}[H]
+  \begin{center}
+  
+    \begin{tabular}{|c|c|c|}
+    
+      \hline
+    
+      \bf Valeur de multication &
+      \bf Image résultante &
+      \bf Différence \\
+      
+      \hline
+      \hline
+      
+      1.8 & 
+      \includegraphics[width=100px]{images/it3_result_1-8.png} &
+      \includegraphics[width=100px]{images/it3_diff_1-8.png}  \\
+      
+      \hline
+      
+      2 &
+      \includegraphics[width=100px]{images/it3_result_2.png} &
+      \includegraphics[width=100px]{images/it3_diff_2.png}  \\
+      
+      \hline
+    \end{tabular}
+    
+    \caption{Tableau de multiplication du canal de saturation}
+    \label{tab:}
+    
+  \end{center}
+\end{table}
 
 \section{Transformation de la teinte}
 
