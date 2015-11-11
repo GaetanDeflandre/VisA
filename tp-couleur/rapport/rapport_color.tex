@@ -311,8 +311,6 @@ l'espace \textit{HSV} qui contient ces informations.
   \end{center}
 \end{figure}
 
-% A partir d'ici l'orthographe n'est pas corrigé
-
 Il est impossible de retrouver l'image \texttt{it2\_72pp} à partir de 
 \texttt{it2\_72pp\_gris}, car les informations de saturation et de 
 teinte sont perdues. Il faut conserver les informations de saturation 
@@ -379,7 +377,7 @@ valeurs de saturation par 2, les valeurs déjà hautes dépassent les 255.
 \section{Transformation de la teinte}
 
 Dans cet exercice, nous continuons le travail sur l'image \texttt{it3}. 
-En utilisant l"espace \textit{HSB}, nous souhaitons changer la couleur 
+En utilisant l'espace \textit{HSB}, nous souhaitons changer la couleur 
 du 5, actuellement vert, en bleu. Pour obtenir ce résultat, il suffit 
 d'ajouter une valeur au canal de teinte \textit{H} de \textit{HSB}. 
 Rappelant que la mesure de la teinte s'effectue entre une valeur de 
@@ -393,9 +391,121 @@ Rappelant que la mesure de la teinte s'effectue entre une valeur de
 \end{figure}
 
 Donc, si nous voulons passer du vert (120$^{\circ}$) au bleu 
-(240$^{\circ}$)
+(240$^{\circ}$), il faut ajouter l'équivalent de 120$^{\circ}$ au 
+canal de teinte. Or les canaux des images sont encodés sur 8 bits, 
+soit une valeur entre 0 et 255. Pour convertir la teinte, du degré à la 
+valeur pour l'encodage, nous utilisons la fonction linéaire suivante:
+
+\[ f(x) = \frac{x*256}{360} \]
+
+Où $x$ est la teinte à ajouter en degrés et $f(x)$ est la teinte à 
+ajouter entre 0 et 255.
+
+\begin{table}[H]
+  \begin{center}
+  
+    \begin{tabular}{|l||c|c|c|}
+    
+      \hline
+      
+      \bf \shortstack{ Valeur de \\ teinte ajoutée } &
+      0$^{\circ}$ &
+      120$^{\circ}$ &
+      200$^{\circ}$ \\
+      
+      \hline
+    
+      \bf Images résultantes &
+      \includegraphics[width=90px]{images/it3_72pp.png} & 
+      \includegraphics[width=90px]{images/it3_120.png} & 
+      \includegraphics[width=90px]{images/it3_200.png} \\
+      
+      \hline
+    \end{tabular}
+    
+    \caption{Changement de la valeur de teinte}
+    \label{tab:}
+    
+  \end{center}
+\end{table}
 
 \section{Analyse dans des espaces couleur adaptés}
+
+Dans ce dernier exercice, nous cherchons les différences entre deux 
+images. Pour cela, nous analysons les images dans les espaces 
+colorimétriques adaptés.\\
+
+\subsection{Premier couple}
+
+D'abord, nous analysons les images \texttt{it3\_72pp} et 
+\texttt{it3\_72\_sans\_5}.
+
+\begin{figure}[H]
+  \begin{center}  
+    \includegraphics[width=120px]{images/it3_72pp.png}
+    \includegraphics[width=120px]{images/it3_72pp_sans_5.png}
+    \caption{Images \texttt{it3\_72pp} et \texttt{it3\_72\_sans\_5}}
+  \end{center}
+\end{figure}
+
+L'espace colorimétrique le plus adapté est l'espace \textit{Lab} car 
+l'information de luminance ne semble pas modifiée, alors que l'on 
+voit bien que la chrominance a changé.
+
+\begin{figure}[H]
+  \begin{center}  
+    \shortstack{
+      \includegraphics[width=150px]{images/it3_Lab.png} \\
+      \texttt{\small it3\_72pp.bmp}
+    }
+    \shortstack{
+      \includegraphics[width=150px]{images/it3_sans_5_Lab.png} \\
+      \texttt{\small it3\_72pp\_sans\_5.bmp}
+    }
+    \caption{Diagrammes de it3 originale et sans 5 dans l’espace Lab.}
+  \end{center}
+\end{figure}
+
+Dans l'espace \textit{Lab}, l'image \texttt{it3\_72\_sans\_5} est en 
+fait la projection de l'image \texttt{it3\_72} sur le plan $Lb$. Pour 
+chaque pixel, la valeur de $a$ est mise à zéro.\\
+
+\subsection{Deuxième couple}
+
+Maintenant, nous travaillons avec les images \texttt{it1\_72} et 
+\texttt{it31\_72\_sans\_cercle}.
+
+\begin{figure}[H]
+  \begin{center}  
+    \includegraphics[width=120px]{images/it1_72pp.png}
+    \includegraphics[width=120px]{images/it1_72pp_sans_cercle.png}
+    \caption{Images \texttt{it1\_72pp} et \texttt{it1\_72\_sans\_cercle}}
+  \end{center}
+\end{figure}
+
+Pour ces images, les différences sont un peu plus subtiles à trouver. 
+La luminance semble identique et la chrominance semble proche. Lors 
+de l'analyse, nous constatons que, pour \texttt{it1\_72}, la teinte est 
+la même pour le fond et le cercle. Par conséquent, nous pouvons en 
+déduire que la teinte n'a pas été modifiée.
+
+\begin{figure}[H]
+  \begin{center}  
+    \shortstack{
+      \includegraphics[width=150px]{images/it1_HSV.png} \\
+      \texttt{\small it1\_72pp.bmp}
+    }
+    \shortstack{
+      \includegraphics[width=150px]{images/it1_sans_cercle_HSV.png} \\
+      \texttt{\small it1\_72pp\_sans\_cercle.bmp}
+    }
+    \caption{Diagrammes de it1 originale et sans cercle dans 
+    l’espace HSV.}
+  \end{center}
+\end{figure}
+
+Il s'agit en fait d'une modification de la saturation $S$ en fonction 
+de la valeur $V$ dans l'espace \textit{HSV}.
 
 \section*{Conclusion}
 
