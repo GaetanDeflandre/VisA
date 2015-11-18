@@ -279,7 +279,7 @@ blue, de l'image sombre, alors que la teinte des pixels de cette image
 est jaune, c'est-à-dire composé de rouge et de vert.\\
 
 Pour régler ce problème, il faut ajouter la valeur $\varphi$ à la 
-luminance dans un espace qui la contient. 
+luminance dans un espace qui la contient.\\
 
 \begin{lstlisting}[caption=adjustment\_luminance\_per\_pixel.ijm]
 // Une macro-squelette pour la couleur.
@@ -477,7 +477,32 @@ Approximativement, nous constatons que la saturation a été diviser par
 \end{table}
 
 Nous observons quelques différences car lorsque nous multiplions les 
-valeurs de saturation par 2, les valeurs déjà hautes dépassent les 255.
+valeurs de saturation par 2, les valeurs déjà hautes dépassent les 255.\\
+
+\begin{lstlisting}[caption=adjustment\_saturation.ijm]
+// Demande la saisie d'une valeur
+// et multiplie la saturation avec cette valeur.
+macro "adjustment_saturation" {
+
+  // Convertir en HSB
+  run("Color Space Converter", "from=RGB to=HSB white=D65");
+
+  run("Split Channels");
+
+  // Multiplier la saturation
+  selectWindow("it3_72pp_saturation_faible.bmp (HSB) (green)");
+  
+  // Demande un nombre 
+  mult = getNumber ("Multiplier la saturation par:", mult);
+  run("Multiply...", "value=" + mult);
+  run("Merge Channels...", "c1=[it3_72pp_saturation_faible.bmp (HSB) (red)] c2=[it3_72pp_saturation_faible.bmp (HSB) (green)] c3=[it3_72pp_saturation_faible.bmp (HSB) (blue)]");
+  run("Color Space Converter", "from=HSB to=RGB white=D65");
+
+}
+
+\end{lstlisting}
+
+\newpage
 
 \section{Transformation de la teinte}
 
