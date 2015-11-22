@@ -183,6 +183,7 @@ macro "otsu" {
 				print ("sigma3=",sigma3);
 
 
+				// <!--
 				// Pour toutes les iterations (tous les seuils possibles),
 				// on cherche les seuils qui minimisent les variances
 				// intra-classe, pour les classes C1, C2 et C3.
@@ -198,6 +199,7 @@ macro "otsu" {
 					k2_min = k2;
 					min_val = intra;
 				}
+				// -->
 
 
 			} // end if
