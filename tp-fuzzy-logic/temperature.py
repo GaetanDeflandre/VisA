@@ -44,6 +44,16 @@ def high(t):
         # high
         return 1.0
 
+def heatStrongly(p):
+    if (p <= 8):
+        # not strongly
+        return 0.0
+    elif (p > 8 and p < 10):
+        # transition
+        return (p-8)/2
+    else:
+        # strongly
+        return 1.0
 
 def mmin(f1, f2, t):
     return min(f1(t), f2(t))
@@ -58,12 +68,18 @@ def main():
     highArray = []
     mminLM = []
     mmaxMH = []
+
+    heatArray = []
+
     for t in temp:
         lowArray.append(low(t))
         mediumArray.append(medium(t))
         highArray.append(high(t))
         mminLM.append(mmin(low, medium, t))
         mmaxMH.append(mmax(medium, high, t))
+
+    for p in range(0,15,1):
+        heatArray.append(heatStrongly(p))
 
     #plt.plot(lowArray, marker=".", label="Basse")
     #plt.plot(mediumArray, marker=".", label="Moyenne")
@@ -75,6 +91,13 @@ def main():
     plt.axis([0, 40, -0.1, 1.1])
     plt.legend()
     plt.show()
+
+    plt.plot(heatArray, marker=".", label="Chauffer fort", color="red")
+    plt.axis([0, 15, -0.1, 1.1])
+    plt.legend()
+    plt.show()
+
+
 
 if __name__ == "__main__":
     main()
