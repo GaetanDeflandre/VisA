@@ -131,11 +131,11 @@ def main():
         heatArray.append(heatStrongly(p))
         mamdaniArray.append(mamdani(12,p));
 
-    #plt.plot(lowArray, marker=".", label="Basse")
+    plt.plot(lowArray, marker=".", label="Basse")
     #plt.plot(mediumArray, marker=".", label="Moyenne")
     #plt.plot(highArray, marker=".", label="Elevée")
     #plt.plot(mminLM, marker=".", label="Min", color="cyan")
-    plt.plot(mmaxMH, marker=".", label="Max", color="magenta")
+    #plt.plot(mmaxMH, marker=".", label="Max", color="magenta")
     plt.xlabel('Température')
     plt.ylabel('Facteur')
     plt.axis([0, 40, -0.1, 1.1])
