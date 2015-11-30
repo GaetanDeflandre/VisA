@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 # The min included and max included temperature
 minT = 0
 maxT = 40
@@ -23,15 +25,13 @@ def medium(t):
     if (t <= 10 or t >= 30):
         # not medium
         return 0.0
-    elif (t > 10 or t < 20):
-        # TODO
-        pass
+    elif (t > 10 and t < 20):
+        return (t-10)/10
     elif (t==20):
-        # TODO
-        pass
-    elif (t > 20 or t < 30):
-        # TODO
-        pass
+        return 1.0
+    elif (t > 20 and t < 30):
+        return 1.0 - (t-20)/10
+
 
 def high(t):
     if (t <= 20):
@@ -45,9 +45,36 @@ def high(t):
         return 1.0
 
 
+def mmin(f1, f2, t):
+    return min(f1(t), f2(t))
+
+def mmax(f1, f2, t):
+    return max(f1(t), f2(t))
+
+
 def main():
+    lowArray = []
+    mediumArray = []
+    highArray = []
+    mminLM = []
+    mmaxMH = []
     for t in temp:
-        print(str(t) + " : " + str(low(t)))
+        lowArray.append(low(t))
+        mediumArray.append(medium(t))
+        highArray.append(high(t))
+        mminLM.append(mmin(low, medium, t))
+        mmaxMH.append(mmax(medium, high, t))
+
+    #plt.plot(lowArray, marker=".", label="Basse")
+    #plt.plot(mediumArray, marker=".", label="Moyenne")
+    #plt.plot(highArray, marker=".", label="Elevée")
+    #plt.plot(mminLM, marker=".", label="Min", color="cyan")
+    plt.plot(mmaxMH, marker=".", label="Max", color="magenta")
+    plt.xlabel('Température')
+    plt.ylabel('Facteur')
+    plt.axis([0, 40, -0.1, 1.1])
+    plt.legend()
+    plt.show()
 
 if __name__ == "__main__":
     main()
