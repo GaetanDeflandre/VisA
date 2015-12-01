@@ -120,6 +120,10 @@ def main():
     heatArray = []
     mamdaniArray = []
 
+    print(low(16))
+    print(medium(16))
+    print(high(16))
+
     for t in temp:
         lowArray.append(low(t))
         mediumArray.append(medium(t))

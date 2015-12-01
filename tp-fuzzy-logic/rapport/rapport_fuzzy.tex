@@ -10,7 +10,6 @@
 % Use Package
 % --------------------------------------
 
-
 \usepackage[francais]{babel}
 \usepackage{ucs}
 \usepackage[utf8]{inputenc}
@@ -136,10 +135,24 @@
 
 \section*{Introduction}
 
+Les techniques de segmentation comme le clustering permettent de 
+calculer des classes d'appartenance. Ces classes permettent de 
+décrire les pixels de l'image de manière net et sans ambiguité.\\
+
+Or, ce type d'apporche n'est pas toujours évident. Dans cette 
+configuration, un pixel appartient ou pas à une classe. La logique 
+floue permetter d'éviter ce genre de segmentation trop net, avec 
+fonction d'appartence qui donnent des facteur plutôt qu'une valeur 
+booléenne.\\
+
+
 \newpage
 
 
 \section{Fonctions d'appartenance}
+
+Soit les fonctions d'appartenance flous aux température basse, 
+moyenne et haute.
 
 \begin{figure}[H]
   \begin{center}
@@ -148,10 +161,34 @@
   \end{center}
 \end{figure}
 
+Voici, le tableau qui montre les degrés d'appartenance aux différentes 
+fonctions pour une température de 16\degre C.
 
+\begin{table}[H]
+  \caption{Degrés d'appartenance pour une température de 16\degre C}
+
+  \begin{center}
+    \begin{tabular}{|l|c|}
+      \hline
+       & Degrés d'appartenance \\
+      \hline
+      \hline
+      Temp basse & 0.4 \\
+      \hline
+      Temp moyenne & 0.6 \\
+      \hline
+      Temp elevée & 0.0\\
+      \hline
+    \end{tabular}
+  \end{center}
+\end{table}
 
 
 \section{Opérateurs de la logique floue}
+
+Maintenant, nous allons voir l'opérateur min qui donne le sous-ensemble 
+flou minimum entre deux fonctions flous. Voici par exemple le 
+minimum entre la fonction de température basse et moyenne.
 
 \begin{figure}[H]
   \begin{center}
@@ -160,7 +197,9 @@
   \end{center}
 \end{figure}
 
-
+Ensuite, l'opérateur max donne le sous-ensemble flou maximum 
+entre deux fonctions flous. Par exemple le maximum entre la 
+fonction de température moyenne et haute.
 
 \begin{figure}[H]
   \begin{center}
@@ -168,7 +207,6 @@
   \caption{Fonction maximum entre la fonction de température moyenne et haute.}
   \end{center}
 \end{figure}
-
 
 
 
