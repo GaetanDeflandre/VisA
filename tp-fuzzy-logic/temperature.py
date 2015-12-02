@@ -1,3 +1,8 @@
+"""
+TP 1: approche de la logique floue
+@author Gaëtan DEFLANDRE
+"""
+
 import matplotlib.pyplot as plt
 
 # The min included and max included temperature

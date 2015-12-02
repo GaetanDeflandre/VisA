@@ -137,13 +137,13 @@
 
 Les techniques de segmentation comme le clustering permettent de 
 calculer des classes d'appartenance. Ces classes permettent de 
-décrire les pixels de l'image de manière net et sans ambiguité.\\
+décrire les pixels de l'image de manière net et sans ambiguïté.\\
 
-Or, ce type d'apporche n'est pas toujours évident. Dans cette 
+Or, ce type d'approche n'est pas toujours évident. Dans cette 
 configuration, un pixel appartient ou pas à une classe. La logique 
-floue permetter d'éviter ce genre de segmentation trop net, avec 
-fonction d'appartence qui donnent des facteur plutôt qu'une valeur 
-booléenne.\\
+floue permet d'éviter ce genre de segmentation trop net, avec 
+fonction d'appartenance qui donne des facteurs plutôt que des 
+valeurs booléennes.\\
 
 
 \newpage
@@ -151,8 +151,8 @@ booléenne.\\
 
 \section{Fonctions d'appartenance}
 
-Soit les fonctions d'appartenance flous aux température basse, 
-moyenne et haute.
+Soit les sous-ensembles flous correspondant aux températures basses, 
+moyennes et hautes.
 
 \begin{figure}[H]
   \begin{center}
@@ -188,24 +188,24 @@ fonctions pour une température de 16\degre C.
 \section{Opérateurs de la logique floue}
 
 Maintenant, nous allons voir l'opérateur min qui donne le sous-ensemble 
-flou minimum entre deux fonctions flous. Voici par exemple le 
-minimum entre la fonction de température basse et moyenne.
+flou minimum entre deux fonctions floues. Voici par exemple le 
+minimum entre la fonction de températures basses et moyennes.
 
 \begin{figure}[H]
   \begin{center}
   \includegraphics[height=280px]{images/min.png}
-  \caption{Fonction minimum entre la fonction de température basse et moyenne.}
+  \caption{Fonction minimum entre la fonction de températures basses et moyennes.}
   \end{center}
 \end{figure}
 
 Ensuite, l'opérateur max donne le sous-ensemble flou maximum 
-entre deux fonctions flous. Par exemple le maximum entre la 
-fonction de température moyenne et haute.
+entre deux fonctions floues. Par exemple le maximum entre la 
+fonction de températures moyennes et hautes.
 
 \begin{figure}[H]
   \begin{center}
   \includegraphics[height=280px]{images/max.png}
-  \caption{Fonction maximum entre la fonction de température moyenne et haute.}
+  \caption{Fonction maximum entre la fonction de températures moyennes et hautes.}
   \end{center}
 \end{figure}
 
@@ -213,11 +213,11 @@ fonction de température moyenne et haute.
 
 \section{Implication floue}
 
-Pour finir ce TP, nous utilisons les régles flous. Elles 
+Pour finir ce TP, nous utilisons les règles floues. Elles 
 permettent, à partir d'une température d'entrée, de déterminer 
 la puissance de chauffe en utilisant une implication de Mamdani.\\
 
-Nous travaillons avec la régle suivante: SI <<Température basse>> 
+Nous travaillons avec la règle suivante: SI <<Température basse>> 
 ALORS <<Chauffer fort>>. Sous-ensemble flou <<Chauffer fort>> est 
 représenté par la figure ci-dessous.
 
@@ -228,11 +228,11 @@ représenté par la figure ci-dessous.
   \end{center}
 \end{figure}
 
-Pour calculer l'implication floue, pour la régle précédente, 
-nous utilisons la méthodes de Mamdani.\\
+Pour calculer l'implication floue, pour la règle précédente, 
+nous utilisons la méthode de Mamdani.\\
 
-Pour une température de 12\degre C, il faut calculer le degé 
-d'appartenence à la fonction flou <<Température basse>>. Nous 
+Pour une température de 12\degre C, il faut calculer le degré 
+d'appartenance à la fonction flou <<Température basse>>. Nous 
 obtenons une valeur en $y$ de 0,8 qui ne doit pas être dépassé.\\
 
 Enfin, il faut résoudre la fonction affine <<Chauffer fort>> pour 
@@ -255,21 +255,10 @@ est 9,6 KW.
 \begin{figure}[H]
   \begin{center}
   \includegraphics[height=170px]{images/low_mamdani_arrow.png}
-  \caption{Fonction de température basse et implication floue.}
+  \caption{Fonction de températures basses et implication floue.}
   \end{center}
 \end{figure}
 
-
-
-\section*{Conclusion}
-
-\newpage
-
-
-
-
-
-\section*{Conclusion}
 
 
 \end{document}
