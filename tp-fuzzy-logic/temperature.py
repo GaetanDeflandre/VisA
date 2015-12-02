@@ -146,7 +146,7 @@ def main():
     plt.legend()
     plt.show()
 
-    plt.plot(mamdaniArray, marker=".", label="Chauffer fort", color="red")
+    plt.plot(heatArray, marker=".", label="Chauffer fort", color="red")
     plt.xlabel('Puissance chauffe (KW)')
     plt.ylabel('Chauffe fort')
     plt.axis([0, 15, -0.1, 1.1])

@@ -165,8 +165,6 @@ Voici, le tableau qui montre les degrés d'appartenance aux différentes
 fonctions pour une température de 16\degre C.
 
 \begin{table}[H]
-  \caption{Degrés d'appartenance pour une température de 16\degre C}
-
   \begin{center}
     \begin{tabular}{|l|c|}
       \hline
@@ -180,9 +178,12 @@ fonctions pour une température de 16\degre C.
       Temp elevée & 0.0\\
       \hline
     \end{tabular}
+    \caption{Degrés d'appartenance pour une température de 16\degre C}
   \end{center}
 \end{table}
 
+
+\newpage
 
 \section{Opérateurs de la logique floue}
 
@@ -208,9 +209,48 @@ fonction de température moyenne et haute.
   \end{center}
 \end{figure}
 
-
+\newpage
 
 \section{Implication floue}
+
+Pour finir ce TP, nous utilisons les régles flous. Elles 
+permettent, à partir d'une température d'entrée, de déterminer 
+la puissance de chauffe en utilisant une implication de Mamdani.\\
+
+Nous travaillons avec la régle suivante: SI <<Température basse>> 
+ALORS <<Chauffer fort>>. Sous-ensemble flou <<Chauffer fort>> est 
+représenté par la figure ci-dessous.
+
+\begin{figure}[H]
+  \begin{center}
+  \includegraphics[height=280px]{images/heat.png}
+  \caption{Sous-ensemble flou <<Chauffer fort>>}
+  \end{center}
+\end{figure}
+
+Pour calculer l'implication floue, pour la régle précédente, 
+nous utilisons la méthodes de Mamdani.\\
+
+Pour une température de 12\degre C, il faut calculer le degé 
+d'appartenence à la fonction flou <<Température basse>>. Nous 
+obtenons une valeur en $y$ de 0,8 qui ne doit pas être dépassé.\\
+
+Enfin, il faut résoudre la fonction affine <<Chauffer fort>> pour 
+déterminer la puissance de chauffe. L'équation de cette fonction 
+est :
+$$
+f(x)=\frac{1}{2}x-4
+$$
+
+D'où, nous pouvons déterminer la puissance de chauffe avec le 
+calcul suivant:
+
+$$
+x = (y+4) * 2
+$$
+
+Donc la puissance de chauffe pour une température de 12\degre C 
+est 9,6 KW.
 
 \begin{figure}[H]
   \begin{center}
@@ -218,7 +258,6 @@ fonction de température moyenne et haute.
   \caption{Fonction de température basse et implication floue.}
   \end{center}
 \end{figure}
-
 
 
 
