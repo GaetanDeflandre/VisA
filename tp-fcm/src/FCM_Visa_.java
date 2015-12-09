@@ -150,14 +150,26 @@ public class FCM_Visa_ implements PlugIn {
 
 		// Initialisation des degres d'appartenance
 		// A COMPLETER
-		for (l = 0; l < nbpixels; l++) {
-			for (j = 0; j < kmax; j++) {
+
+		// Voir cours page 11
+		float membership = 0.0f;
+		for (i = 0; i < kmax; i++) {
+			for (l = 0; l < nbpixels; l++) {
+				membership = 0.0f;
 				for (k = 0; k < kmax; k++) {
-					double div = Dprev[k][l] / Dprev[j][l];
-					Uprev[j][l] = Math.pow(div, 2 / (m - 1));
+
+					if (Math.pow(Dprev[k][l], 2) < 1) {
+						continue;
+					}
+
+					double num = Math.pow(Dprev[i][l], 2);
+					double den = Math.pow(Dprev[k][l], 2);
+					membership += Math.pow(num / den, 2 / (m - 1));
 				}
-				if (Uprev[j][l] > 1.0){
-					Uprev[j][l] = 1 / Uprev[j][l];
+
+				Uprev[i][l] = Math.pow(membership, -1);
+				if (Uprev[i][l] > 1) {
+					Uprev[i][l] = 1 / Uprev[i][l];
 				}
 			}
 		}
@@ -179,28 +191,23 @@ public class FCM_Visa_ implements PlugIn {
 			// Update the matrix of centroids
 			for (k = 0; k < kmax; k++) {
 				double[] num = new double[3];
-				double[] den = new double[3];
+				double den = 0.0;
 
 				num[0] = 0.0;
 				num[1] = 0.0;
 				num[2] = 0.0;
-				den[0] = 0.0;
-				den[1] = 0.0;
-				den[2] = 0.0;
-				
+
 				for (l = 0; l < nbpixels; l++) {
-					num[0] += Uprev[k][l] * red[l];
-					num[1] += Uprev[k][l] * green[l];
-					num[2] += Uprev[k][l] * blue[l];
-					
-					den[0] += Uprev[k][l];
-					den[1] += Uprev[k][l];
-					den[2] += Uprev[k][l];
+					num[0] += Math.pow(Uprev[k][l], m) * red[l];
+					num[1] += Math.pow(Uprev[k][l], m) * green[l];
+					num[2] += Math.pow(Uprev[k][l], m) * blue[l];
+
+					den += Math.pow(Uprev[k][l], m);
 				}
-				
-				c[k][0] = num[0] / den[0];
-				c[k][1] = num[1] / den[1];
-				c[k][2] = num[2] / den[2];
+
+				c[k][0] = num[0] / den;
+				c[k][1] = num[1] / den;
+				c[k][2] = num[2] / den;
 			}
 
 			// Compute Dmat, the matrix of distances (euclidian) with the
@@ -211,40 +218,49 @@ public class FCM_Visa_ implements PlugIn {
 					double g2 = Math.pow(green[l] - c[k][1], 2);
 					double b2 = Math.pow(blue[l] - c[k][2], 2);
 
-					// Pourquoi distance prev
 					Dmat[k][l] = r2 + g2 + b2;
 				}
 			}
-			
-			for (l = 0; l < nbpixels; l++) {
-				for (j = 0; j < kmax; j++) {
+
+			for (i = 0; i < kmax; i++) {
+				for (l = 0; l < nbpixels; l++) {
 					for (k = 0; k < kmax; k++) {
-						double div = Dmat[k][l] / Dmat[j][l];
-						Umat[j][l] = Math.pow(div, 2 / (m - 1));
+
+						if (Math.pow(Dprev[k][l], 2) == 0) {
+							continue;
+						}
+
+						double num = Math.pow(Dprev[i][l], 2);
+						double den = Math.pow(Dprev[k][l], 2);
+						Umat[i][l] += Math.pow(num / den, 2 / (m - 1));
 					}
-					if (Umat[j][l] > 1.0){
-						Umat[j][l] = 1 / Umat[j][l];
+
+					Uprev[i][l] = Math.pow(membership, -1);
+					if (Uprev[i][l] > 1) {
+						Uprev[i][l] = 1 / Uprev[i][l];
 					}
 				}
 			}
-			
 
-			
+			for (i = 0; i < kmax; i++) {
+				for (l = 0; l < nbpixels; l++) {
+					Dprev[i][l] = Dmat[i][l];
+					Uprev[i][l] = Umat[i][l];
+				}
+			}
+
 			// Calculate difference between the previous partition and the new
 			// partition (performance index)
-			for (k = 0; k < kmax; k++){
-				for (l = 0; l < nbpixels; l++){
-					
+			for (i = 0; i < kmax; i++) {
+				for (l = 0; l < nbpixels; l++) {
+					figJ[iter] = Math.pow(Umat[i][l], m)
+							* Math.pow(Dmat[i][l], 2);
 				}
 			}
-			
-			for (l = 0; l < nbpixels; l++) {
-				for (j = 0; j < kmax; j++) {
-					Dprev[j][l] = Dmat[j][l];
-					Uprev[j][l] = Umat[j][l];
-				}
-			}
-			
+
+			if (iter > 0)
+				stab = figJ[iter] - figJ[iter - 1];
+
 			iter++;
 			// //////////////////////////////////////////////////////
 
