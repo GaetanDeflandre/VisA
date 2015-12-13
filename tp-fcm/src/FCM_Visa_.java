@@ -219,7 +219,7 @@ public class FCM_Visa_ implements PlugIn {
 			}
 
 			// < Calcul des degres d'appartenance
-			for (i = 0; i < kmax; i++) {
+			for (i = 0; i < nbclasses; i++) {
 				for (j = 0; j < nbpixels; j++) {
 					float membership = 0.0f;
 					for (k = 0; k < kmax; k++) {
@@ -245,7 +245,7 @@ public class FCM_Visa_ implements PlugIn {
 
 			// Calculate difference between the previous partition and the new
 			// partition (performance index)
-			for (i = 0; i < kmax; i++) {
+			for (i = 0; i < nbclasses; i++) {
 				for (l = 0; l < nbpixels; l++) {
 					figJ[iter] = Math.pow(Umat[i][l], m)
 							* Math.pow(Dmat[i][l], 2);
