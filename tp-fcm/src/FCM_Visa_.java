@@ -137,14 +137,14 @@ public class FCM_Visa_ implements PlugIn {
 		}
 
 		// Calcul de distance entre data et centroides
-		for (l = 0; l < nbpixels; l++) {
+		for (j = 0; j < nbpixels; j++) {
 			for (k = 0; k < kmax; k++) {
-				double r2 = Math.pow(red[l] - c[k][0], 2);
-				double g2 = Math.pow(green[l] - c[k][1], 2);
-				double b2 = Math.pow(blue[l] - c[k][2], 2);
+				double r2 = Math.pow(red[j] - c[k][0], 2);
+				double g2 = Math.pow(green[j] - c[k][1], 2);
+				double b2 = Math.pow(blue[j] - c[k][2], 2);
 
 				// Pourquoi distance prev
-				Dprev[k][l] = r2 + g2 + b2;
+				Dprev[k][j] = r2 + g2 + b2;
 			}
 		}
 
@@ -152,25 +152,19 @@ public class FCM_Visa_ implements PlugIn {
 		// A COMPLETER
 
 		// Voir cours page 11
-		float membership = 0.0f;
 		for (i = 0; i < kmax; i++) {
-			for (l = 0; l < nbpixels; l++) {
-				membership = 0.0f;
+			for (j = 0; j < nbpixels; j++) {
+				float membership = 0.0f;
 				for (k = 0; k < kmax; k++) {
 
-					if (Math.pow(Dprev[k][l], 2) < 1) {
-						continue;
+					if (Dprev[k][j] > 0) {
+						membership += Math.pow(Dprev[i][j] / Dprev[k][j],
+								2.0 / (m - 1));
+					} else {
+						membership += 1;
 					}
-
-					double num = Math.pow(Dprev[i][l], 2);
-					double den = Math.pow(Dprev[k][l], 2);
-					membership += Math.pow(num / den, 2 / (m - 1));
 				}
-
-				Uprev[i][l] = Math.pow(membership, -1);
-				if (Uprev[i][l] > 1) {
-					Uprev[i][l] = 1 / Uprev[i][l];
-				}
+				Uprev[i][j] = 1 / membership;
 			}
 		}
 
@@ -205,40 +199,38 @@ public class FCM_Visa_ implements PlugIn {
 					den += Math.pow(Uprev[k][l], m);
 				}
 
-				c[k][0] = num[0] / den;
-				c[k][1] = num[1] / den;
-				c[k][2] = num[2] / den;
+				if (den > 0) {
+					c[k][0] = num[0] / den;
+					c[k][1] = num[1] / den;
+					c[k][2] = num[2] / den;
+				}
 			}
 
 			// Compute Dmat, the matrix of distances (euclidian) with the
 			// centroids
-			for (l = 0; l < nbpixels; l++) {
+			for (j = 0; j < nbpixels; j++) {
 				for (k = 0; k < kmax; k++) {
-					double r2 = Math.pow(red[l] - c[k][0], 2);
-					double g2 = Math.pow(green[l] - c[k][1], 2);
-					double b2 = Math.pow(blue[l] - c[k][2], 2);
+					double r2 = Math.pow(red[j] - c[k][0], 2);
+					double g2 = Math.pow(green[j] - c[k][1], 2);
+					double b2 = Math.pow(blue[j] - c[k][2], 2);
 
-					Dmat[k][l] = r2 + g2 + b2;
+					Dmat[k][j] = r2 + g2 + b2;
 				}
 			}
 
 			for (i = 0; i < kmax; i++) {
-				for (l = 0; l < nbpixels; l++) {
+				for (j = 0; j < nbpixels; j++) {
+					float membership = 0.0f;
 					for (k = 0; k < kmax; k++) {
 
-						if (Math.pow(Dprev[k][l], 2) == 0) {
-							continue;
+						if (Dmat[k][j] > 0) {
+							membership += Math.pow(Dmat[i][j] / Dmat[k][j],
+									2.0 / (m - 1));
+						} else {
+							membership += 1;
 						}
-
-						double num = Math.pow(Dprev[i][l], 2);
-						double den = Math.pow(Dprev[k][l], 2);
-						Umat[i][l] += Math.pow(num / den, 2 / (m - 1));
 					}
-
-					Uprev[i][l] = Math.pow(membership, -1);
-					if (Uprev[i][l] > 1) {
-						Uprev[i][l] = 1 / Uprev[i][l];
-					}
+					Umat[i][j] = 1 / membership;
 				}
 			}
 
