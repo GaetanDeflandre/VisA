@@ -171,7 +171,7 @@ public class Dave_Visa_ implements PlugIn {
 			for (i = 0; i < nbclasses; i++) {
 				membership += Uprev[i][j];
 			}
-			Uprev[nbclasses-1][j] = 1 - membership;
+			Uprev[nbclasses - 1][j] = 1 - membership;
 		}
 
 		// //////////////////////////////////////////////////////////
@@ -214,6 +214,18 @@ public class Dave_Visa_ implements PlugIn {
 
 			// Compute Dmat, the matrix of distances (euclidian) with the
 			// centroids
+			for (j = 0; j < nbpixels; j++) {
+				for (k = 0; k < kmax; k++) {
+					double r2 = Math.pow(red[j] - c[k][0], 2);
+					double g2 = Math.pow(green[j] - c[k][1], 2);
+					double b2 = Math.pow(blue[j] - c[k][2], 2);
+
+					// Pourquoi distance prev
+					Dmat[k][j] = r2 + g2 + b2;
+				}
+			}
+
+			// < Calcul des degres d'appartenance
 			for (i = 0; i < nbclasses; i++) {
 				for (j = 0; j < nbpixels; j++) {
 					double membership = 0;
@@ -234,7 +246,7 @@ public class Dave_Visa_ implements PlugIn {
 				for (i = 0; i < nbclasses; i++) {
 					membership += Umat[i][j];
 				}
-				Umat[nbclasses-1][j] = 1 - membership;
+				Umat[nbclasses - 1][j] = 1 - membership;
 			}
 			// >
 
