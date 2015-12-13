@@ -218,6 +218,7 @@ public class FCM_Visa_ implements PlugIn {
 				}
 			}
 
+			// < Calcul des degres d'appartenance
 			for (i = 0; i < kmax; i++) {
 				for (j = 0; j < nbpixels; j++) {
 					float membership = 0.0f;
@@ -233,6 +234,7 @@ public class FCM_Visa_ implements PlugIn {
 					Umat[i][j] = 1 / membership;
 				}
 			}
+			// >
 
 			for (i = 0; i < kmax; i++) {
 				for (l = 0; l < nbpixels; l++) {

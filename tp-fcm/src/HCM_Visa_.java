@@ -35,7 +35,7 @@ public class HCM_Visa_ implements PlugIn {
 		ImagePlus imp;
 		ImagePlus impseg;
 		ImagePlus impJ;
-		IJ.showMessage("Algorithme FCM", "If ready, Press OK");
+		IJ.showMessage("Algorithme HCM", "If ready, Press OK");
 		ImagePlus cw;
 
 		imp = WindowManager.getCurrentImage();
@@ -44,7 +44,7 @@ public class HCM_Visa_ implements PlugIn {
 		int width = ip.getWidth();
 		int height = ip.getHeight();
 
-		impseg = NewImage.createImage("Image segmentee par FCM", width, height,
+		impseg = NewImage.createImage("Image segmentee par HCM", width, height,
 				1, 24, 0);
 		ipseg = impseg.getProcessor();
 		impseg.show();
@@ -151,25 +151,27 @@ public class HCM_Visa_ implements PlugIn {
 		// Initialisation des degres d'appartenance
 		// A COMPLETER
 
-		// Voir cours page 11
-		for (i = 0; i < kmax; i++) {
+		// Voir cours page 23
+		for (i = 0; i < nbclasses; i++) {
 			for (j = 0; j < nbpixels; j++) {
-				float membership = 0.0f;
-				for (k = 0; k < kmax; k++) {
+				Uprev[i][j] = 1;
+			}
+		}
 
-					if (Dprev[k][j] > 0) {
-						membership += Math.pow(Dprev[i][j] / Dprev[k][j],
-								2.0 / (m - 1));
-					} else {
-						membership += 1;
+		for (i = 0; i < nbclasses; i++) {
+			for (j = 0; j < nbpixels; j++) {
+				double membership = 1;
+				for (k = 0; k < nbclasses; k++) {
+					if (Dprev[k][j] <= Dprev[i][j] && k != i) {
+						membership = 0;
 					}
 				}
-				Uprev[i][j] = 1 / membership;
+				Uprev[i][j] = membership;
 			}
 		}
 
 		// //////////////////////////////////////////////////////////
-		// FIN INITIALISATION FCM
+		// FIN INITIALISATION HCM
 		// /////////////////////////////////////////////////////////
 
 		// ///////////////////////////////////////////////////////////
@@ -218,21 +220,25 @@ public class HCM_Visa_ implements PlugIn {
 				}
 			}
 
-			for (i = 0; i < kmax; i++) {
+			// < Calcul des degres d'appartenance
+			for (i = 0; i < nbclasses; i++) {
 				for (j = 0; j < nbpixels; j++) {
-					float membership = 0.0f;
-					for (k = 0; k < kmax; k++) {
-
-						if (Dmat[k][j] > 0) {
-							membership += Math.pow(Dmat[i][j] / Dmat[k][j],
-									2.0 / (m - 1));
-						} else {
-							membership += 1;
-						}
-					}
-					Umat[i][j] = 1 / membership;
+					Umat[i][j] = 1;
 				}
 			}
+
+			for (i = 0; i < nbclasses; i++) {
+				for (j = 0; j < nbpixels; j++) {
+					double membership = 1;
+					for (k = 0; k < nbclasses; k++) {
+						if (Dmat[k][j] <= Dmat[i][j] && k != i) {
+							membership = 0;
+						}
+					}
+					Umat[i][j] = membership;
+				}
+			}
+			// >
 
 			for (i = 0; i < kmax; i++) {
 				for (l = 0; l < nbpixels; l++) {
@@ -283,12 +289,12 @@ public class HCM_Visa_ implements PlugIn {
 			xplot[w] = (double) w;
 			yplot[w] = (double) figJ[w];
 		}
-		Plot plot = new Plot("Performance Index (FCM)", "iterations",
+		Plot plot = new Plot("Performance Index (HCM)", "iterations",
 				"J(P) value", xplot, yplot);
 		plot.setLineWidth(2);
 		plot.setColor(Color.blue);
 		plot.show();
-	} // Fin FCM
+	} // Fin HCM
 
 	int indice;
 	double min, max;
