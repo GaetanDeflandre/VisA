@@ -25,13 +25,6 @@ macro "otsu" {
 
 	getHistogram (level,histo,256);
 
-	// Affichage de l'histogramme
-	for ( i =0 ; i<= 255; i++)
-	{
-		print ("histo[",level[i],"] =", histo[i]);
-	}
-
-
 	// <!--
 	// Initialisation des valeurs utiles pour la méthode.
 
@@ -67,6 +60,7 @@ macro "otsu" {
 	intra = 0;
 	// -->
 
+	setBatchMode(true);
 
 	// Dans le cas de la segmentation en 3 classes, nous
 	// cherchons 2 niveaux k1 et k2. Le niveau k1 permet
@@ -140,15 +134,6 @@ macro "otsu" {
 				mu3 = somme3 / omega3;
 				// -->
 
-
-				// Affichage
-				print("k1=",k1);
-				print("k2=",k2);
-				print("mu1=",mu1);
-				print("mu2=",mu2);
-				print("mu3=",mu3);
-
-
 				// <!--
 				// Calcul des sigmas, les variances des classes.
 				// Voir equation (10, 11), [Otsu, 1979]
@@ -176,13 +161,6 @@ macro "otsu" {
 				sigma3 = sSomme3 / omega3;
 				// -->
 
-
-				// Affichage
-				print ("sigma1=",sigma1);
-				print ("sigma2=",sigma2);
-				print ("sigma3=",sigma3);
-
-
 				// <!--
 				// Pour toutes les iterations (tous les seuils possibles),
 				// on cherche les seuils qui minimisent les variances
@@ -201,16 +179,13 @@ macro "otsu" {
 				}
 				// -->
 
-
 			} // end if
 
 		} // end for k2
 
 	} // end for k1
 
-
-	print("seuil k1=",k1_min);
-	print("seuil k2=",k2_min);
+	setBatchMode(false);
 
 	// Segmentation de la classe C1 et des classes C2, C3
 	selectImage(seg_class1_class23);
@@ -225,10 +200,5 @@ macro "otsu" {
 	// Assemblage des classes C1, C2 et C2 en image RGB
 	// afin de distinguer les trois classes
 	run("Merge Channels...", "c1=mask12_3 c2=mask1_23 c3=mask1_23");
-
-	Dialog.create("Fin");
-	Dialog.addMessage("Cliquer sur OK pour terminer la segmentation par la methode d'Otsu");
-	Dialog.show();
-
 
 }
