@@ -135,8 +135,30 @@
 
 \section*{Introduction}
 
+Dans ces TPs, nous poursuivons l'étude de la logique floue. Nous allons 
+utiliser les principes de cette logique pour segmenter des images. \\
+
+Durant ces TPs, nous implémentons en logique floue des algorithmes 
+classifications de classes dans les images. En logique booléenne, 
+certaines de ces méthodes sont très utilisés, telles que le C-Means. Il 
+existe la variante floue de cette méthode, elle s'apelle FCM (Fuzzy 
+C-Means). Ainsi, nous verrons différents algorithmes de classification 
+floue.\\
+
+
 \newpage
 
+
+
+Lors de ces TPs, nous utilisons pour image de référence, une image 
+contenant six classes. Cette image est la suivante:
+
+\begin{figure}[H]
+  \begin{center} 
+    \includegraphics[width=180px]{../img/6_classes_RGB.png}
+    \caption{\texttt{6\_classes\_RGB.tif} utilisé pour la classification.}
+  \end{center}
+\end{figure}
 
 \section{Algorithme Fuzzy C-Means}
 
@@ -157,14 +179,80 @@ u_{ik} = \frac{1}{\sum\limits_{j=1}(\frac{d_{ik}}{d_{ij}})^{\frac{2}{m-1}}}
 $$
 \end{Large}
 
-ij.log("message")
+\subsection{Résultats}
 
+\begin{tabular}{|l|c|}
+  \hline
+  Nombre de classes & 6 \\
+  \hline
+  Valeur de m & 2 \\
+  \hline
+  Nombre d'itération & 100 \\
+  \hline
+  Valeur de seuil de  & 0.000001 \\
+  \hline
+  Randomisation & 1 \\
+  \hline
+\end{tabular}
 
+\begin{figure}[H]
+  \begin{center} 
+    \includegraphics[width=180px]{../img/segFCM.png}
+    \caption{Segmentation avec la méthode FCM}
+  \end{center}
+\end{figure}
 
+\section{Algorithme Hard C-Means}
 
+\subsection{Résultats}
 
+\begin{tabular}{|l|c|}
+  \hline
+  Nombre de classes & 6 \\
+  \hline
+  Valeur de m & 2 \\
+  \hline
+  Nombre d'itération & 1000 \\
+  \hline
+  Valeur de seuil de  & 0.0000001 \\
+  \hline
+  Randomisation & 1 \\
+  \hline
+\end{tabular}
 
+\begin{figure}[H]
+  \begin{center} 
+    \includegraphics[width=180px]{../img/segHCM.png}
+    \caption{}
+  \end{center}
+\end{figure}
 
+\section{Algorithme Possibilistic C-Means}
+
+\section{Algorithme de Davé}
+
+\subsection{Résultats}
+
+\begin{tabular}{|l|c|}
+  \hline
+  Nombre de classes & 6 \\
+  \hline
+  Valeur de m & 2 \\
+  \hline
+  Nombre d'itération & 100 \\
+  \hline
+  Valeur de seuil de  & 0.000001 \\
+  \hline
+  Randomisation & 1 \\
+  \hline
+\end{tabular}
+
+\begin{figure}[H]
+  \begin{center} 
+    %\includegraphics[width=180px]{../img/segFCM.png}
+    \caption{}
+  \end{center}
+\end{figure}
 
 
 \end{document}
