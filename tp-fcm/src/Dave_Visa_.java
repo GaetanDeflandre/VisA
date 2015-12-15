@@ -143,7 +143,6 @@ public class Dave_Visa_ implements PlugIn {
 				double g2 = Math.pow(green[j] - c[k][1], 2);
 				double b2 = Math.pow(blue[j] - c[k][2], 2);
 
-				// Pourquoi distance prev
 				Dprev[k][j] = r2 + g2 + b2;
 			}
 		}
@@ -220,7 +219,6 @@ public class Dave_Visa_ implements PlugIn {
 					double g2 = Math.pow(green[j] - c[k][1], 2);
 					double b2 = Math.pow(blue[j] - c[k][2], 2);
 
-					// Pourquoi distance prev
 					Dmat[k][j] = r2 + g2 + b2;
 				}
 			}

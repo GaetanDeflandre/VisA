@@ -117,6 +117,7 @@ public class PCM_Visa_ implements PlugIn {
 		int rx, ry;
 		int x, y;
 		int epsilonx, epsilony;
+		double[] n = new double[nbclasses];
 
 		// Initialisation des centroides (aleatoirement)
 
@@ -143,27 +144,37 @@ public class PCM_Visa_ implements PlugIn {
 				double g2 = Math.pow(green[j] - c[k][1], 2);
 				double b2 = Math.pow(blue[j] - c[k][2], 2);
 
-				// Pourquoi distance prev
 				Dprev[k][j] = r2 + g2 + b2;
 			}
 		}
 
 		// Initialisation des degres d'appartenance
-		// A COMPLETER
+
+		// Voir cours page 30
+		for (i = 0; i < nbclasses; i++) {
+			double num = 0.0;
+			double den = 0.0;
+
+			for (j = 0; j < nbpixels; j++) {
+				num += Math.pow(Uprev[i][j], m) * Math.pow(Dprev[i][j], 2);
+				den += Math.pow(Uprev[i][j], m);
+			}
+
+			n[i] = num / den;
+		}
 
 		// Voir cours page 31
 		for (i = 0; i < nbclasses; i++) {
 			for (j = 0; j < nbpixels; j++) {
 
-				double membership = 0;
-				for (k = 0; k < nbclasses; k++) {
-					if (Dprev[k][j] > Dprev[i][j] && k != i) {
-						membership = 1;
-					} else {
-						membership = 0;
-					}
+				double membership = 1;
+
+				membership += Math.pow(Math.pow(Dprev[i][j], 2) / n[i],
+						1 / (m - 1));
+
+				if (Uprev[i][j] != 0) {
+					Uprev[i][j] = 1 / membership;
 				}
-				Uprev[i][j] = membership;
 			}
 		}
 
@@ -219,17 +230,29 @@ public class PCM_Visa_ implements PlugIn {
 
 			// < Calcul des degres d'appartenance
 			for (i = 0; i < nbclasses; i++) {
+				double num = 0.0;
+				double den = 0.0;
+
+				for (j = 0; j < nbpixels; j++) {
+					num += Math.pow(Umat[i][j], m) * Math.pow(Dmat[i][j], 2);
+					den += Math.pow(Umat[i][j], m);
+				}
+
+				n[i] = num / den;
+			}
+
+			// Voir cours page 31
+			for (i = 0; i < nbclasses; i++) {
 				for (j = 0; j < nbpixels; j++) {
 
-					double membership = 0;
-					for (k = 0; k < nbclasses; k++) {
-						if (Dmat[k][j] > Dmat[i][j] && k != i) {
-							membership = 1;
-						} else {
-							membership = 0;
-						}
+					double membership = 1;
+
+					membership += Math.pow(Math.pow(Dmat[i][j], 2) / n[i],
+							1 / (m - 1));
+
+					if (Umat[i][j] != 0) {
+						Umat[i][j] = 1 / membership;
 					}
-					Umat[i][j] = membership;
 				}
 			}
 			// >
@@ -247,7 +270,8 @@ public class PCM_Visa_ implements PlugIn {
 			for (i = 0; i < kmax; i++) {
 				for (l = 0; l < nbpixels; l++) {
 					figJ[iter] = Math.pow(Umat[i][l], m)
-							* Math.pow(Dmat[i][l], 2);
+							* Math.pow(Dmat[i][l], 2) + n[i]
+							* Math.pow(1 - Umat[i][l], m);
 				}
 			}
 

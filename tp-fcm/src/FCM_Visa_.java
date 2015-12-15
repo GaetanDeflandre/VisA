@@ -143,7 +143,6 @@ public class FCM_Visa_ implements PlugIn {
 				double g2 = Math.pow(green[j] - c[k][1], 2);
 				double b2 = Math.pow(blue[j] - c[k][2], 2);
 
-				// Pourquoi distance prev
 				Dprev[k][j] = r2 + g2 + b2;
 			}
 		}

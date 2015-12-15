@@ -117,6 +117,7 @@ public class HCM_Visa_ implements PlugIn {
 		int rx, ry;
 		int x, y;
 		int epsilonx, epsilony;
+		double min = Double.POSITIVE_INFINITY;
 
 		// Initialisation des centroides (aleatoirement)
 
@@ -138,14 +139,23 @@ public class HCM_Visa_ implements PlugIn {
 
 		// Calcul de distance entre data et centroides
 		for (j = 0; j < nbpixels; j++) {
+			min = Double.POSITIVE_INFINITY;
+			int minId = 0;
+
 			for (k = 0; k < kmax; k++) {
 				double r2 = Math.pow(red[j] - c[k][0], 2);
 				double g2 = Math.pow(green[j] - c[k][1], 2);
 				double b2 = Math.pow(blue[j] - c[k][2], 2);
 
-				// Pourquoi distance prev
 				Dprev[k][j] = r2 + g2 + b2;
+				Uprev[k][j] = 0.0;
+
+				if (Dprev[k][j] < min) {
+					min = Dprev[k][j];
+					minId = k;
+				}
 			}
+			Uprev[minId][1] = 1.0;
 		}
 
 		// Initialisation des degres d'appartenance
@@ -162,7 +172,7 @@ public class HCM_Visa_ implements PlugIn {
 			for (j = 0; j < nbpixels; j++) {
 				double membership = 1;
 				for (k = 0; k < nbclasses; k++) {
-					if (Dprev[k][j] <= Dprev[i][j] && k != i) {
+					if (Dprev[k][j] <= Dprev[i][j]) {
 						membership = 0;
 					}
 				}
@@ -211,13 +221,23 @@ public class HCM_Visa_ implements PlugIn {
 			// Compute Dmat, the matrix of distances (euclidian) with the
 			// centroids
 			for (j = 0; j < nbpixels; j++) {
+				min = Double.POSITIVE_INFINITY;
+				int minId = 0;
+
 				for (k = 0; k < kmax; k++) {
 					double r2 = Math.pow(red[j] - c[k][0], 2);
 					double g2 = Math.pow(green[j] - c[k][1], 2);
 					double b2 = Math.pow(blue[j] - c[k][2], 2);
 
 					Dmat[k][j] = r2 + g2 + b2;
+					Umat[k][j] = 0.0;
+
+					if (Dmat[k][j] < min) {
+						min = Dmat[k][j];
+						minId = k;
+					}
 				}
+				Umat[minId][1] = 1.0;
 			}
 
 			// < Calcul des degres d'appartenance
@@ -231,7 +251,7 @@ public class HCM_Visa_ implements PlugIn {
 				for (j = 0; j < nbpixels; j++) {
 					double membership = 1;
 					for (k = 0; k < nbclasses; k++) {
-						if (Dmat[k][j] <= Dmat[i][j] && k != i) {
+						if (Dmat[k][j] <= Dmat[i][j]) {
 							membership = 0;
 						}
 					}

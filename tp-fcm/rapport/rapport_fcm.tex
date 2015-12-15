@@ -162,43 +162,32 @@ contenant six classes. Cette image est la suivante:
 
 \section{Algorithme Fuzzy C-Means}
 
-\subsection{Initialisation}
-
-\begin{itemize}
- \item Choisir le nombre de classes.
- \item m = 2 par défaut
- \item Initialisation des centroides aléatoire.
- \item Initialisation des distance $x_i-c_k$\\
-\end{itemize}
-
-Initialisation de la matrice de degrés d'appartenance, de patition $U$\\
-
-\begin{Large}
-$$
-u_{ik} = \frac{1}{\sum\limits_{j=1}(\frac{d_{ik}}{d_{ij}})^{\frac{2}{m-1}}}
-$$
-\end{Large}
-
 \subsection{Résultats}
 
-\begin{tabular}{|l|c|}
-  \hline
-  Nombre de classes & 6 \\
-  \hline
-  Valeur de m & 2 \\
-  \hline
-  Nombre d'itération & 100 \\
-  \hline
-  Valeur de seuil de  & 0.000001 \\
-  \hline
-  Randomisation & 1 \\
-  \hline
-\end{tabular}
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{|l|c|}
+      \hline
+      Nombre de classes & 6 \\
+      \hline
+      Valeur de m & 2 \\
+      \hline
+      Nombre d'itération & 100 \\
+      \hline
+      \shortstack{ Valeur de seuil \\ de stabilité } & 0.000001 \\
+      \hline
+      Randomisation & 1 \\
+      \hline
+    \end{tabular}
+    \caption{Tableau des paramétres utiliser pour l'algorithme de FCM}
+  \end{center}
+\end{table}
+
 
 \begin{figure}[H]
   \begin{center} 
     \includegraphics[width=180px]{../img/segFCM.png}
-    \caption{Segmentation avec la méthode FCM}
+    \caption{Image résultante avec l'algorithme FCM}
   \end{center}
 \end{figure}
 
@@ -206,53 +195,102 @@ $$
 
 \subsection{Résultats}
 
-\begin{tabular}{|l|c|}
-  \hline
-  Nombre de classes & 6 \\
-  \hline
-  Valeur de m & 2 \\
-  \hline
-  Nombre d'itération & 1000 \\
-  \hline
-  Valeur de seuil de  & 0.0000001 \\
-  \hline
-  Randomisation & 1 \\
-  \hline
-\end{tabular}
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{|l|c|}
+      \hline
+      Nombre de classes & 6 \\
+      \hline
+      Valeur de m & 1 \\
+      \hline
+      Nombre d'itération & 1000 \\
+      \hline
+      \shortstack{ Valeur de seuil \\ de stabilité }  & 0.000001 \\
+      \hline
+      Randomisation & 1 \\
+      \hline
+    \end{tabular}
+    \caption{Tableau des paramétres utiliser pour l'algorithme de HCM}
+  \end{center}
+\end{table}
+
 
 \begin{figure}[H]
   \begin{center} 
     \includegraphics[width=180px]{../img/segHCM.png}
-    \caption{}
+    \caption{Image résultante avec l'algorithme HCM}
   \end{center}
 \end{figure}
 
 \section{Algorithme Possibilistic C-Means}
 
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{|l|c|}
+      \hline
+      Nombre de classes & 6 \\
+      \hline
+      Valeur de m & 1 \\
+      \hline
+      Nombre d'itération & 1000 \\
+      \hline
+      \shortstack{ Valeur de seuil \\ de stabilité }  & 0.000001 \\
+      \hline
+      Randomisation & 1 \\
+      \hline
+    \end{tabular}
+    \caption{Tableau des paramétres utiliser pour l'algorithme de PCM}
+  \end{center}
+\end{table}
+
+
+\begin{figure}[H]
+  \begin{center} 
+    \includegraphics[width=180px]{../img/segHCM.png}
+    \caption{Image résultante avec l'algorithme PCM}
+  \end{center}
+\end{figure}
+
 \section{Algorithme de Davé}
 
 \subsection{Résultats}
 
-\begin{tabular}{|l|c|}
-  \hline
-  Nombre de classes & 6 \\
-  \hline
-  Valeur de m & 2 \\
-  \hline
-  Nombre d'itération & 100 \\
-  \hline
-  Valeur de seuil de  & 0.000001 \\
-  \hline
-  Randomisation & 1 \\
-  \hline
-\end{tabular}
+\begin{table}[H]
+  \begin{center}
+    \begin{tabular}{|l|c|}
+      \hline
+      Nombre de classes & 6 \\
+      \hline
+      Valeur de m & 2 \\
+      \hline
+      Nombre d'itération & 100 \\
+      \hline
+      \shortstack{ Valeur de seuil \\ de stabilité }  & 0.000001 \\
+      \hline
+      Randomisation & 1 \\
+      \hline
+    \end{tabular}
+    \caption{Tableau des paramétres utiliser pour l'algorithme de Davé}
+  \end{center}
+\end{table}
+
 
 \begin{figure}[H]
   \begin{center} 
     %\includegraphics[width=180px]{../img/segFCM.png}
-    \caption{}
+    \caption{Image résultante avec l'algorithme de Davé}
   \end{center}
 \end{figure}
+
+\section*{Conclusion}
+
+Nous pouvons conclure que les différentes méthodes vues lors de ces TPs, ne sont 
+pas véritablement des algorithmes de segmentations. En effet, elles calculent 
+des degrés d'appartenance qui ne permettent pas de segmenter directement les 
+images.\\
+
+Pour segmenter les images dont les degrés d'appartenance aux classes ont été calculés,
+il faut définir des heuristiques qui vont séparer les pixels.\\
 
 
 \end{document}
