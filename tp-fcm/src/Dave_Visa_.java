@@ -152,25 +152,21 @@ public class Dave_Visa_ implements PlugIn {
 
 		for (i = 0; i < nbclasses; i++) {
 			for (j = 0; j < nbpixels; j++) {
-				double membership = 0;
+
+				Uprev[i][j] = 0;
+
 				for (k = 0; k < kmax; k++) {
-					if (Dprev[k][j] > 0) {
-						membership += Math.pow(Dprev[i][j] / Dprev[k][j],
-								2.0 / (m - 1));
-					} else {
-						membership += 1;
+					if (Dprev[k][j] != 0) {
+						Uprev[i][j] += Math.pow(Dprev[i][j] / Dprev[k][j],
+								1 / (m - 1));
 					}
 				}
-				Uprev[i][j] = 1 / membership;
-			}
-		}
 
-		for (j = 0; j < nbpixels; j++) {
-			double membership = 0;
-			for (i = 0; i < nbclasses; i++) {
-				membership += Uprev[i][j];
+				if (Uprev[i][j] >= 1) {
+					Uprev[i][j] = 1 / Uprev[i][j];
+				}
+
 			}
-			Uprev[nbclasses - 1][j] = 1 - membership;
 		}
 
 		// //////////////////////////////////////////////////////////
@@ -258,8 +254,8 @@ public class Dave_Visa_ implements PlugIn {
 			// Calculate difference between the previous partition and the new
 			// partition (performance index)
 			// For Dave
-			for (i = 0; i < kmax; i++) {
-				for (l = 0; l < nbpixels; l++) {
+			for (l = 0; l < nbpixels; l++) {
+				for (i = 0; i < kmax; i++) {
 					figJ[iter] = Math.pow(Umat[i][l], m)
 							* Math.pow(Dmat[i][l], 2);
 				}

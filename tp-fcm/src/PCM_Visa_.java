@@ -150,31 +150,22 @@ public class PCM_Visa_ implements PlugIn {
 
 		// Initialisation des degres d'appartenance
 
-		// Voir cours page 30
-		for (i = 0; i < nbclasses; i++) {
-			double num = 0.0;
-			double den = 0.0;
-
-			for (j = 0; j < nbpixels; j++) {
-				num += Math.pow(Uprev[i][j], m) * Math.pow(Dprev[i][j], 2);
-				den += Math.pow(Uprev[i][j], m);
-			}
-
-			n[i] = num / den;
-		}
-
-		// Voir cours page 31
 		for (i = 0; i < nbclasses; i++) {
 			for (j = 0; j < nbpixels; j++) {
 
-				double membership = 1;
+				Uprev[i][j] = 0;
 
-				membership += Math.pow(Math.pow(Dprev[i][j], 2) / n[i],
-						1 / (m - 1));
-
-				if (Uprev[i][j] != 0) {
-					Uprev[i][j] = 1 / membership;
+				for (k = 0; k < kmax; k++) {
+					if (Dprev[k][j] != 0) {
+						Uprev[i][j] += Math.pow(Dprev[i][j] / Dprev[k][j],
+								1 / (m - 1));
+					}
 				}
+
+				if (Uprev[i][j] >= 1) {
+					Uprev[i][j] = 1 / Uprev[i][j];
+				}
+
 			}
 		}
 
@@ -197,6 +188,8 @@ public class PCM_Visa_ implements PlugIn {
 				double[] num = new double[3];
 				double den = 0.0;
 
+				double nnum = 0.0;
+
 				num[0] = 0.0;
 				num[1] = 0.0;
 				num[2] = 0.0;
@@ -206,6 +199,8 @@ public class PCM_Visa_ implements PlugIn {
 					num[1] += Math.pow(Uprev[k][l], m) * green[l];
 					num[2] += Math.pow(Uprev[k][l], m) * blue[l];
 
+					nnum += Math.pow(Uprev[k][l], m) * Math.pow(Dprev[k][l], 2);
+
 					den += Math.pow(Uprev[k][l], m);
 				}
 
@@ -213,6 +208,7 @@ public class PCM_Visa_ implements PlugIn {
 					c[k][0] = num[0] / den;
 					c[k][1] = num[1] / den;
 					c[k][2] = num[2] / den;
+					n[k] = nnum / den;
 				}
 			}
 
@@ -229,17 +225,6 @@ public class PCM_Visa_ implements PlugIn {
 			}
 
 			// < Calcul des degres d'appartenance
-			for (i = 0; i < nbclasses; i++) {
-				double num = 0.0;
-				double den = 0.0;
-
-				for (j = 0; j < nbpixels; j++) {
-					num += Math.pow(Umat[i][j], m) * Math.pow(Dmat[i][j], 2);
-					den += Math.pow(Umat[i][j], m);
-				}
-
-				n[i] = num / den;
-			}
 
 			// Voir cours page 31
 			for (i = 0; i < nbclasses; i++) {
