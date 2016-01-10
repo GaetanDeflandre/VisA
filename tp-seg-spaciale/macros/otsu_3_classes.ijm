@@ -5,7 +5,8 @@
 // Date: nov 2015
 // Author: L. Macaire, G. Deflandre
 // par calcul de chaque intervalle
-macro "otsu" {
+// otsu 3 classes par minimisation intra classes
+macro "otsu3class" {
 
 	image = getImageID();
 
@@ -23,7 +24,9 @@ macro "otsu" {
 	run("Duplicate...", "title=mask12_3");
 	seg_class12_class3 = getImageID();
 
-	getHistogram (level,histo,256);
+	// Obtenir l'histogramme des niveaux de gris dans la variable histo
+	getHistogram(level, histo, 256);
+
 
 	// <!--
 	// Initialisation des valeurs utiles pour la méthode.
@@ -60,7 +63,10 @@ macro "otsu" {
 	intra = 0;
 	// -->
 
+
+	// DEBUT DU BATCH
 	setBatchMode(true);
+
 
 	// Dans le cas de la segmentation en 3 classes, nous
 	// cherchons 2 niveaux k1 et k2. Le niveau k1 permet
@@ -200,5 +206,8 @@ macro "otsu" {
 	// Assemblage des classes C1, C2 et C2 en image RGB
 	// afin de distinguer les trois classes
 	run("Merge Channels...", "c1=mask12_3 c2=mask1_23 c3=mask1_23");
+
+	// Pour obtenir un mask 8 bits
+	run("8-bit");
 
 }

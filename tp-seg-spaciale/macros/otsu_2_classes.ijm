@@ -3,7 +3,8 @@
 // Date: sept 2015
 // Author: L. Macaire
 // par calcul de chaque intervalle
-macro "otsu" {
+// otsu 2 classes par minimisation intra classes
+macro "otsu2class" {
 
 	image = getImageID();
 
@@ -13,39 +14,44 @@ macro "otsu" {
 	run("Duplicate...", "title=binarisee");
 	image_binaire = getImageID();
 
-	getHistogram (level,histo,256);
-
-	// affichage de l'histogramme
-	for ( i =0 ; i<= 255; i++)
-	{
-		print ("histo[",level[i],"] =", histo[i]);
-	}
+	// Obtenir l'histogramme des niveaux de gris dans la variable histo
+	getHistogram(level, histo, 256);
 
 
-	// valeur initiale de omega1 mu1 omega2 mu2
-	omega1=0;
-	somme1=0;
+	// <!--
+	// Initialisation des valeurs utiles pour la méthode.
+
+	// Soit omegai la probabilite qu'a un pixel
+	// d'etre dans la classe Ci
+	// Soit, omega1 + omega2 = 1
+	omega1 = 0;
 	omega2 = 0;
+
+	// Sommes qui interviennent dans le calcul des mus
+	somme1 = 0;
 	somme2 = 0;
 
-	mu1 =0;
-	mu2 =0;
+	// Moyennes des classes
+	mu1 = 0;
+	mu2 = 0;
 
-	sSomme1=0;
-	sSomme2=0;
+	// Sommes qui interviennent dans le calcul des sigmas
+	sSomme1 = 0;
+	sSomme2 = 0;
 
-	sigma1=0;
-	sigma2=0;
+	// sigmai est la variance de la classe Ci
+	sigma1 = 0;
+	sigma2 = 0;
 
 	min_val = 99999999999999999999999;
 	i_max = 255;
-	intra=0;
+	intra = 0;
+	// -->
 
-	sum =0;
 
-	for(t=0; t<255; t++){
-		sum= sum + histo[t];
-	}
+	// DEBUT DU BATCH
+	setBatchMode(true);
+
 
 	for( k =2; k <255; k++)
 	{
@@ -85,10 +91,6 @@ macro "otsu" {
 			mu1 = somme1 / omega1;
 			mu2 = somme2 / omega2;
 
-			print ("k=",k);
-			print ("mu1=",mu1);
-			print ("mu2=",mu2);
-
 
 			///////Sigma
 
@@ -108,8 +110,6 @@ macro "otsu" {
 			sigma1 = sSomme1 / omega1;
 			sigma2 = sSomme2 / omega2;
 
-			print ("sigma1=",sigma1);
-			print ("sigma2=",sigma2);
 
 			intra = omega1*sigma1 + omega2*sigma2 ;
 
@@ -125,16 +125,12 @@ macro "otsu" {
 
 	} // for t
 
+	setBatchMode(false);
+
 	selectImage(image_binaire);
-	print ("seuil k=",k_min);
+
 	setThreshold(0,k_min);
+	setOption("BlackBackground", false);
 	run("Convert to Mask");
-
-
-
-	Dialog.create("Fin");
-	Dialog.addMessage(" Cliquer sur OK pour terminer le traitement sur la saturation");
-	Dialog.show();
-
 
 }
