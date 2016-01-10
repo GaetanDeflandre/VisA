@@ -1,4 +1,44 @@
 // @athour Gaetan DEFLANDRE
 macro "ACP" {
 
+  image = getImageID();
+
+  // Recuperer dossier de l'image
+  dir = getInfo("image.directory");
+
+  run("Split Channels");
+  run("Images to Stack", "name=Stack title=[] use");
+
+  // Plug-in analyse composantes principales
+  run("PCA ");
+
+  // On garde l'image avec la vaiance la plus elevee
+  selectWindow("PCA of Stack");
+  run("Stack to Images");
+  selectWindow("variance=7.9120378E8");
+
+  // Image en 8bit pour utiliser Otsu 3 classes
+  run("8-bit");
+  runMacro(dir + "macros/otsu_3_classes.ijm");
+
+
+  // Fermeture des fenetres inutiles
+  selectWindow("variance=7.9120378E8");
+  close();
+  selectWindow("variance=1.01427824E8");
+  close();
+  selectWindow("variance=5.573138E-15");
+  close();
+  selectWindow("Eigenvalue spectrum of Stack");
+  close();
+  selectWindow("Stack");
+  close();
+
+
+  selectWindow("RGB");
+
+  // En post traitement, il est possible t'utiliser
+  // un filtre median pour supprimer le bruit
+  //run("Median...", "radius=2");
+
 }

@@ -26,4 +26,10 @@ macro "multi_seuillage_couleur" {
   close();
   selectWindow(name + " (red)");
   close();
+
+  selectWindow("RGB");
+
+  // En post traitement, il est possible t'utiliser
+  // un filtre median pour supprimer le bruit
+  //run("Median...", "radius=2");
 }
