@@ -1,3 +1,4 @@
+// @athour Gaetan DEFLANDRE
 macro "multi_seuillage_couleur" {
 
   image = getImageID();
