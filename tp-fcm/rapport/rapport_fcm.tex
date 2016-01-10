@@ -162,11 +162,12 @@ contenant six classes. Cette image est la suivante:
 
 \section{Algorithme Fuzzy C-Means}
 
-Fuzzy C-Means est la viriante floue la plus simpliste de C-Means.	
+Fuzzy C-Means est la variante floue la plus simpliste de C-Means.	
 
 \subsection{Résultats}
 
-Les résultats dépendent de la position des centroïde, calculé aléatoirement. 
+Les résultats dépendent de la position des centroïdes, calculés 
+aléatoirement. 
 Nous montrons ici, des exemples de bonne classification.
 
 \begin{table}[H]
@@ -197,6 +198,10 @@ Nous montrons ici, des exemples de bonne classification.
 \end{figure}
 
 \section{Algorithme Hard C-Means}
+
+Pour HCM, la manière de calculer les degrés d'appartenance diffère 
+par rapport à FCM. Nous forçons la classe la proche du cluster à 1, 0 
+sinon.
 
 \subsection{Résultats}
 
@@ -229,34 +234,13 @@ Nous montrons ici, des exemples de bonne classification.
 
 \section{Algorithme Possibilistic C-Means}
 
-\begin{table}[H]
-  \begin{center}
-    \begin{tabular}{|l|c|}
-      \hline
-      Nombre de classes & 6 \\
-      \hline
-      Valeur de m & 1 \\
-      \hline
-      Nombre d'itération & 1000 \\
-      \hline
-      \shortstack{ Valeur de seuil \\ de stabilité }  & 0.000001 \\
-      \hline
-      Randomisation & 1 \\
-      \hline
-    \end{tabular}
-    \caption{Tableau des paramétres utiliser pour l'algorithme de PCM}
-  \end{center}
-\end{table}
-
-
-\begin{figure}[H]
-  \begin{center} 
-    \includegraphics[width=180px]{../img/segHCM.png}
-    \caption{Image résultante avec l'algorithme PCM}
-  \end{center}
-\end{figure}
+Pour PCM, cette fois-ci les calculs des degrés d'appartenance et aussi 
+des indices de performance changent. Un système de pénalité est utilisé 
+dans le calcul des degrés d'appartenance.
 
 \section{Algorithme de Davé}
+Enfin pour Davé, cet algorithme ressemble à PCM avec en plus une 
+classe pour le bruit.
 
 \subsection{Résultats}
 
@@ -289,13 +273,14 @@ Nous montrons ici, des exemples de bonne classification.
 
 \section*{Conclusion}
 
-Nous pouvons conclure que les différentes méthodes vues lors de ces TPs, ne sont 
-pas véritablement des algorithmes de segmentations. En effet, elles calculent 
-des degrés d'appartenance qui ne permettent pas de segmenter directement les 
-images.\\
+Nous pouvons conclure que les différentes méthodes vues lors de ces TPs, 
+ne sont pas véritablement des algorithmes de segmentations. En effet, 
+elles calculent des degrés d'appartenance qui ne permettent pas de 
+segmenter directement les images.\\
 
-Pour segmenter les images dont les degrés d'appartenance aux classes ont été calculés,
-il faut définir des heuristiques qui vont séparer les pixels.\\
+Pour segmenter les images dont les degrés d'appartenance aux classes ont 
+été calculés, il faut définir des heuristiques qui vont séparer les 
+pixels.\\
 
 
 \end{document}
