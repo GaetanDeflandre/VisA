@@ -8,6 +8,7 @@
 *.toc
 *.pdf
 *.backup
+*~
 
 ## Intermediate documents:
 *.dvi
@@ -138,3 +139,6 @@ sympy-plots-for-*.tex/
 */obj/*
 *.depend
 *.layout
+
+# Others
+*.zip
